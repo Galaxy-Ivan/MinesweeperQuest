@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <title>MinesweeperQuest — 赏金板</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <style>
+        body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; padding: 20px; }
+        input, button, select, textarea { font-size: 14px; padding: 6px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: #f5f5f5; }
+        .small { font-size: 13px; color: #666; }
+        .controls { display:flex; gap:8px; align-items:center; margin-bottom: 8px; }
+        .right { margin-left: auto; }
+    </style>
+</head>
+<body>
+<h2>MinesweeperQuest — 赏金板（多人实时）</h2>
+
+<div class="controls">
+    <label>你的名字（作为身份标识）： <input id="username" placeholder="例如：Alice" /></label>
+    <button id="saveName">保存</button>
+    <span class="small">（请勿包含双引号 " ）</span>
+
+    <div class="right">
+        <label>等级 <select id="newLevel"><option>L1</option><option>L2</option><option>L3</option><option>L4</option><option selected>L5</option><option>L6</option><option>L7</option><option>L8</option><option>L9</option><option>L10</option></select></label>
+        <label>详情 <input id="newDetails" placeholder="任务描述" /></label>
+        <button id="addTask">发布任务</button>
+    </div>
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <th>发布者</th>
+        <th>领取者</th>
+        <th>等级</th>
+        <th>详细信息</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody id="taskBody">
+    <!-- rows rendered here -->
+    </tbody>
+</table>
+
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+<script>
+    let stompClient = null;
+
+    function setStatus(msg) { console.log(msg); }
+
+    function loadNameToInput() {
+        const stored = localStorage.getItem('mq_username') || '';
+        document.getElementById('username').value = stored;
+    }
+
+    function saveName() {
+        const name = document.getElementById('username').value.trim();
+        if (name.includes('"')) { alert('姓名不能包含双引号 "'); return; }
+        if (!name) { alert('请输入一个名字'); return; }
+        localStorage.setItem('mq_username', name);
+        alert('保存成功：' + name);
+    }
+
+    document.getElementById('saveName').addEventListener('click', saveName);
+    loadNameToInput();
+
+    function connect() {
+        const socket = new SockJS('/ws');
+        stompClient = Stomp.over(socket);
+        // 如果你在控制台看到太多心跳日志，可以把下面的日志输出关闭
+        stompClient.connect({}, function(frame) {
+            setStatus('connected: ' + frame);
+            stompClient.subscribe('/topic/tasks', function(message) {
+                try {
+                    const tasks = JSON.parse(message.body);
+                    renderTasks(tasks);
+                } catch (e) {
+                    console.error('解析 tasks 失败', e, message.body);
+                }
+            });
+        }, function(err) {
+            console.error('STOMP 连接错误', err);
+        });
+    }
+
+    function fetchTasks() {
+        fetch('/api/tasks').then(r => r.json()).then(renderTasks).catch(e => console.error(e));
+    }
+
+    function renderTasks(tasks) {
+        const tbody = document.getElementById('taskBody');
+        tbody.innerHTML = '';
+        const myName = (localStorage.getItem('mq_username') || '').trim();
+
+        tasks.forEach(t => {
+            const tr = document.createElement('tr');
+            const pubTd = document.createElement('td'); pubTd.textContent = t.publisher; tr.appendChild(pubTd);
+            const assTd = document.createElement('td'); assTd.textContent = t.assignee && t.assignee.length ? t.assignee : '-'; tr.appendChild(assTd);
+            const levelTd = document.createElement('td'); levelTd.textContent = t.level; tr.appendChild(levelTd);
+            const detTd = document.createElement('td'); detTd.textContent = t.details; tr.appendChild(detTd);
+
+            const btnTd = document.createElement('td');
+            // 决定按钮：如果我是发布者 -> 删除；否则 如果无人领取 -> 领取；如果我已领取 -> 放弃；否则 显示已被领取（禁用）
+            if (myName && myName === t.publisher) {
+                const btn = document.createElement('button');
+                btn.textContent = '删除';
+                btn.onclick = () => {
+                    if (!confirm('确认删除该任务？')) return;
+                    fetch(`/api/tasks/${encodeURIComponent(t.id)}/delete`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ user: myName })
+                    }).then(resp => {
+                        if (!resp.ok) resp.text().then(txt => alert('删除失败: ' + txt));
+                    });
+                };
+                btnTd.appendChild(btn);
+            } else {
+                if (!t.assignee || t.assignee.length === 0) {
+                    const btn = document.createElement('button');
+                    btn.textContent = '领取任务';
+                    btn.onclick = () => {
+                        const name = localStorage.getItem('mq_username') || '';
+                        if (!name) { alert('请先在上方填写并保存你的名字'); return; }
+                        if (name.includes('"')) { alert('姓名不能包含双引号 "'); return; }
+                        fetch(`/api/tasks/${encodeURIComponent(t.id)}/claim`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ user: name })
+                        }).then(resp => {
+                            if (!resp.ok) resp.text().then(txt => alert('领取失败: ' + txt));
+                        });
+                    };
+                    btnTd.appendChild(btn);
+                } else if (t.assignee === myName) {
+                    const btn = document.createElement('button');
+                    btn.textContent = '放弃任务';
+                    btn.onclick = () => {
+                        const name = localStorage.getItem('mq_username') || '';
+                        fetch(`/api/tasks/${encodeURIComponent(t.id)}/unclaim`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ user: name })
+                        }).then(resp => {
+                            if (!resp.ok) resp.text().then(txt => alert('放弃失败: ' + txt));
+                        });
+                    };
+                    btnTd.appendChild(btn);
+                } else {
+                    const span = document.createElement('span');
+                    span.textContent = '已被领取';
+                    btnTd.appendChild(span);
+                }
+            }
+
+            tr.appendChild(btnTd);
+            tbody.appendChild(tr);
+        });
+    }
+
+    // 发布新任务
+    document.getElementById('addTask').addEventListener('click', () => {
+        const publisher = (localStorage.getItem('mq_username') || '').trim();
+        if (!publisher) { alert('请先填写并保存你的名字'); return; }
+        if (publisher.includes('"')) { alert('姓名不能包含双引号 "'); return; }
+        const level = document.getElementById('newLevel').value;
+        const details = document.getElementById('newDetails').value || '';
+        fetch('/api/tasks', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ publisher, level, details })
+        }).then(resp => {
+            if (!resp.ok) resp.text().then(txt => alert('发布失败: ' + txt));
+            else {
+                document.getElementById('newDetails').value = '';
+            }
+        }).catch(e => console.error(e));
+    });
+
+    // 启动
+    connect();
+    fetchTasks();
+</script>
+</body>
+</html>
