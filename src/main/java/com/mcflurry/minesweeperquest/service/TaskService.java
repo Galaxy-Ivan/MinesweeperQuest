@@ -3,6 +3,7 @@ package com.mcflurry.minesweeperquest.service;
 import com.mcflurry.minesweeperquest.model.Task;
 import com.mcflurry.minesweeperquest.repo.TaskRepository;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +18,14 @@ public class TaskService {
     public TaskService(TaskRepository repo, SimpMessagingTemplate messaging) {
         this.repo = repo;
         this.messaging = messaging;
+    }
+
+    // 每天早上 8 点执行（Cron 表达式：秒 分 时 日 月 星期）
+    @Scheduled(cron = "* * 8 * * *")
+    public void clearTasksEveryMorning() {
+        repo.clearAll();
+        broadcast();
+        System.out.println("已清空所有任务 (每天 8 点自动执行)");
     }
 
     public List<Task> getAll() {

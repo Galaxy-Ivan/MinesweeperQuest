@@ -2,29 +2,46 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8" />
-    <title>MinesweeperQuest — 赏金板</title>
+    <title>Minesweeper Quest</title>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <style>
         body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; padding: 20px; }
         input, button, select, textarea { font-size: 14px; padding: 6px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 12px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        table {
+            width: 90%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            table-layout: fixed;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
         th { background: #f5f5f5; }
+        th:nth-child(1), td:nth-child(1) { width: 15%; }
+        th:nth-child(2), td:nth-child(2) { width: 15%; }
+        th:nth-child(3), td:nth-child(3) { width: 10%; }
+        th:nth-child(4), td:nth-child(4) { width: 50%; }
+        th:nth-child(5), td:nth-child(5) { width: 10%; }
         .small { font-size: 13px; color: #666; }
         .controls { display:flex; gap:8px; align-items:center; margin-bottom: 8px; }
         .right { margin-left: auto; }
+        .pagination { margin-top: 12px; display: flex; justify-content: flex-end; gap: 4px; }
+        .pagination select { padding: 4px; }
     </style>
 </head>
 <body>
-<h2>MinesweeperQuest — 赏金板（多人实时）</h2>
+<h2>Minesweeper Quest</h2>
 
 <div class="controls">
-    <label>你的名字（作为身份标识）： <input id="username" placeholder="例如：Alice" /></label>
+    <label>用户名（唯一身份标识）： <input id="username" placeholder="WoM" /></label>
     <button id="saveName">保存</button>
-    <span class="small">（请勿包含双引号 " ）</span>
 
     <div class="right">
-        <label>等级 <select id="newLevel"><option>L1</option><option>L2</option><option>L3</option><option>L4</option><option selected>L5</option><option>L6</option><option>L7</option><option>L8</option><option>L9</option><option>L10</option></select></label>
+        <label>等级 <input id="newLevel" placeholder="L??" /></label>
         <label>详情 <input id="newDetails" placeholder="任务描述" /></label>
         <button id="addTask">发布任务</button>
     </div>
@@ -45,10 +62,19 @@
     </tbody>
 </table>
 
+<div class="pagination">
+    <label>页数：
+        <select id="pageSelect"></select>
+    </label>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 <script>
     let stompClient = null;
+    let currentTasks = []; // 保存最新任务
+    let currentPage = 1;
+    const pageSize = 10;
 
     function setStatus(msg) { console.log(msg); }
 
@@ -71,13 +97,13 @@
     function connect() {
         const socket = new SockJS('/ws');
         stompClient = Stomp.over(socket);
-        // 如果你在控制台看到太多心跳日志，可以把下面的日志输出关闭
         stompClient.connect({}, function(frame) {
             setStatus('connected: ' + frame);
             stompClient.subscribe('/topic/tasks', function(message) {
                 try {
-                    const tasks = JSON.parse(message.body);
-                    renderTasks(tasks);
+                    currentTasks = JSON.parse(message.body);
+                    renderTasks(currentTasks, currentPage);
+                    renderPagination(currentTasks.length);
                 } catch (e) {
                     console.error('解析 tasks 失败', e, message.body);
                 }
@@ -88,15 +114,24 @@
     }
 
     function fetchTasks() {
-        fetch('/api/tasks').then(r => r.json()).then(renderTasks).catch(e => console.error(e));
+        fetch('/api/tasks').then(r => r.json()).then(tasks => {
+            currentTasks = tasks;
+            renderTasks(currentTasks, currentPage);
+            renderPagination(currentTasks.length);
+        }).catch(e => console.error(e));
     }
 
-    function renderTasks(tasks) {
+    function renderTasks(tasks, page) {
         const tbody = document.getElementById('taskBody');
         tbody.innerHTML = '';
         const myName = (localStorage.getItem('mq_username') || '').trim();
 
-        tasks.forEach(t => {
+        // 分页处理
+        const startIdx = (page - 1) * pageSize;
+        const endIdx = startIdx + pageSize;
+        const pageTasks = tasks.slice(startIdx, endIdx);
+
+        pageTasks.forEach(t => {
             const tr = document.createElement('tr');
             const pubTd = document.createElement('td'); pubTd.textContent = t.publisher; tr.appendChild(pubTd);
             const assTd = document.createElement('td'); assTd.textContent = t.assignee && t.assignee.length ? t.assignee : '-'; tr.appendChild(assTd);
@@ -104,19 +139,25 @@
             const detTd = document.createElement('td'); detTd.textContent = t.details; tr.appendChild(detTd);
 
             const btnTd = document.createElement('td');
-            // 决定按钮：如果我是发布者 -> 删除；否则 如果无人领取 -> 领取；如果我已领取 -> 放弃；否则 显示已被领取（禁用）
+
             if (myName && myName === t.publisher) {
                 const btn = document.createElement('button');
                 btn.textContent = '删除';
-                btn.onclick = () => {
-                    if (!confirm('确认删除该任务？')) return;
-                    fetch(`/api/tasks/${encodeURIComponent(t.id)}/delete`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ user: myName })
-                    }).then(resp => {
-                        if (!resp.ok) resp.text().then(txt => alert('删除失败: ' + txt));
-                    });
+                btn.dataset.confirm = 'false';
+                btn.onclick = (e) => {
+                    e.stopPropagation();
+                    if (btn.dataset.confirm === 'false') {
+                        btn.textContent = '确定删除';
+                        btn.dataset.confirm = 'true';
+                    } else {
+                        fetch(`/api/tasks/${encodeURIComponent(t.id)}/delete`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ user: myName })
+                        }).then(resp => {
+                            if (!resp.ok) resp.text().then(txt => alert('删除失败: ' + txt));
+                        });
+                    }
                 };
                 btnTd.appendChild(btn);
             } else {
@@ -158,9 +199,37 @@
             }
 
             tr.appendChild(btnTd);
-            tbody.appendChild(tr);
+            tbody.prepend(tr);
+        });
+
+        // 恢复所有删除按钮状态
+        document.addEventListener('click', () => {
+            document.querySelectorAll('button[data-confirm="true"]').forEach(btn => {
+                btn.textContent = '删除';
+                btn.dataset.confirm = 'false';
+            });
         });
     }
+
+    // 渲染分页下拉框
+    function renderPagination(totalTasks) {
+        const pageSelect = document.getElementById('pageSelect');
+        const totalPages = Math.ceil(totalTasks / pageSize);
+        pageSelect.innerHTML = '';
+        for (let i = 1; i <= totalPages; i++) {
+            const opt = document.createElement('option');
+            opt.value = i;
+            opt.textContent = i;
+            if (i === currentPage) opt.selected = true;
+            pageSelect.appendChild(opt);
+        }
+    }
+
+    // 处理分页选择
+    document.getElementById('pageSelect').addEventListener('change', (e) => {
+        currentPage = parseInt(e.target.value);
+        renderTasks(currentTasks, currentPage);
+    });
 
     // 发布新任务
     document.getElementById('addTask').addEventListener('click', () => {
@@ -175,9 +244,7 @@
             body: JSON.stringify({ publisher, level, details })
         }).then(resp => {
             if (!resp.ok) resp.text().then(txt => alert('发布失败: ' + txt));
-            else {
-                document.getElementById('newDetails').value = '';
-            }
+            else document.getElementById('newDetails').value = '';
         }).catch(e => console.error(e));
     });
 

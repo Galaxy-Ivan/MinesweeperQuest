@@ -5,12 +5,6 @@
   "level" : "L5",
   "details" : "完成一局高级"
 }, {
-  "id" : "00000000-0000-0000-0000-000000000002",
-  "publisher" : "McFlurry",
-  "assignee" : "",
-  "level" : "L8",
-  "details" : "获得 50000 经验"
-}, {
   "id" : "bc5e148a-08be-49fe-9136-0a4baee5140f",
   "publisher" : "McFlurry",
   "assignee" : "123",
@@ -22,4 +16,28 @@
   "assignee" : "",
   "level" : "L1",
   "details" : "完成9999999999局地狱ng"
+}, {
+  "id" : "51983fd9-a4fa-4ba1-851e-924a45c5abb5",
+  "publisher" : "X-Bow",
+  "assignee" : "",
+  "level" : "L8E",
+  "details" : "TOP SECRET"
+}, {
+  "id" : "7c73ad74-4fda-4f1e-b1d5-fdcbc3e15afb",
+  "publisher" : "McFlurry",
+  "assignee" : "",
+  "level" : "new",
+  "details" : "置顶任务"
+}, {
+  "id" : "5bd29201-dd72-46ff-93f2-4a211c458da1",
+  "publisher" : "McFlurry",
+  "assignee" : "",
+  "level" : "",
+  "details" : "特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长"
+}, {
+  "id" : "7adaa442-2d19-4498-a15e-49e2f6b5b344",
+  "publisher" : "McFlurry",
+  "assignee" : "",
+  "level" : "",
+  "details" : "新任务"
 } ]

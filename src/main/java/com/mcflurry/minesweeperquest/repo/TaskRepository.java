@@ -88,4 +88,9 @@ public class TaskRepository {
                 .collect(Collectors.toList());
         writeTasks(all);
     }
+
+    // ✅ 新增：清空所有任务
+    public void clearAll() {
+        writeTasks(new ArrayList<>());
+    }
 }
