@@ -1,43 +1,36 @@
 [ {
-  "id" : "00000000-0000-0000-0000-000000000001",
-  "publisher" : "onion",
-  "assignee" : "123",
-  "level" : "L5",
-  "details" : "完成一局高级"
-}, {
-  "id" : "bc5e148a-08be-49fe-9136-0a4baee5140f",
+  "id" : "2f106388-2988-40b8-a4bb-0bc6b7fdc2ed",
   "publisher" : "McFlurry",
-  "assignee" : "123",
-  "level" : "L7",
-  "details" : "测试"
-}, {
-  "id" : "1df9a434-bc07-441f-809b-800981ec24b4",
-  "publisher" : "Hollow Knight",
   "assignee" : "",
-  "level" : "L1",
-  "details" : "完成9999999999局地狱ng"
+  "level" : "L100",
+  "details" : "测试",
+  "status" : "未接"
 }, {
-  "id" : "51983fd9-a4fa-4ba1-851e-924a45c5abb5",
+  "id" : "0fda9449-875c-4db9-9cbf-a4a014d26429",
+  "publisher" : "onion",
+  "assignee" : "",
+  "level" : "L5",
+  "details" : "完成一局高级",
+  "status" : "未接"
+}, {
+  "id" : "5f2675ac-7529-4422-9942-210a5546d3de",
   "publisher" : "X-Bow",
   "assignee" : "",
   "level" : "L8E",
-  "details" : "TOP SECRET"
+  "details" : "TOP SECRET",
+  "status" : "未接"
 }, {
-  "id" : "7c73ad74-4fda-4f1e-b1d5-fdcbc3e15afb",
-  "publisher" : "McFlurry",
-  "assignee" : "",
-  "level" : "new",
-  "details" : "置顶任务"
+  "id" : "60309e0d-2917-4fd7-b675-25ba364a01a0",
+  "publisher" : "Hollow Knight",
+  "assignee" : "Galaxy",
+  "level" : "L1",
+  "details" : "完成 999999 局地狱 NG",
+  "status" : "进行中"
 }, {
-  "id" : "5bd29201-dd72-46ff-93f2-4a211c458da1",
+  "id" : "d44aacef-b7ec-4071-bf1e-99c1ff008ab5",
   "publisher" : "McFlurry",
-  "assignee" : "",
-  "level" : "",
-  "details" : "特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长特别长"
-}, {
-  "id" : "7adaa442-2d19-4498-a15e-49e2f6b5b344",
-  "publisher" : "McFlurry",
-  "assignee" : "",
-  "level" : "",
-  "details" : "新任务"
+  "assignee" : "Galaxy",
+  "level" : "L01",
+  "details" : "测试",
+  "status" : "已完成"
 } ]

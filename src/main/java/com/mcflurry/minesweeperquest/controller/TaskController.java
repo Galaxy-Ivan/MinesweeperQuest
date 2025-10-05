@@ -22,7 +22,6 @@ public class TaskController {
         return service.getAll();
     }
 
-    // 创建任务（publisher 从请求中带入，不需要登录）
     @PostMapping
     public ResponseEntity<Task> create(@RequestBody Map<String, String> body) {
         String publisher = body.get("publisher");
@@ -35,7 +34,6 @@ public class TaskController {
         return ResponseEntity.ok(t);
     }
 
-    // 领取
     @PostMapping("/{id}/claim")
     public ResponseEntity<?> claim(@PathVariable String id, @RequestBody Map<String, String> body) {
         String user = body.get("user");
@@ -44,7 +42,6 @@ public class TaskController {
         return ok ? ResponseEntity.ok().build() : ResponseEntity.status(409).body("cannot claim");
     }
 
-    // 放弃
     @PostMapping("/{id}/unclaim")
     public ResponseEntity<?> unclaim(@PathVariable String id, @RequestBody Map<String, String> body) {
         String user = body.get("user");
@@ -53,7 +50,14 @@ public class TaskController {
         return ok ? ResponseEntity.ok().build() : ResponseEntity.status(409).body("cannot unclaim");
     }
 
-    // 删除（只有发布者可删除）
+    @PostMapping("/{id}/complete")
+    public ResponseEntity<?> complete(@PathVariable String id, @RequestBody Map<String, String> body) {
+        String user = body.get("user");
+        if (user == null || user.trim().isEmpty()) return ResponseEntity.badRequest().body("missing user");
+        boolean ok = service.completeTask(id, user.trim());
+        return ok ? ResponseEntity.ok().build() : ResponseEntity.status(409).body("cannot complete");
+    }
+
     @PostMapping("/{id}/delete")
     public ResponseEntity<?> delete(@PathVariable String id, @RequestBody Map<String, String> body) {
         String user = body.get("user");

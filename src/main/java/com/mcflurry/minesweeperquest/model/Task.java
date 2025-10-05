@@ -1,14 +1,12 @@
 package com.mcflurry.minesweeperquest.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Task {
     private String id;
     private String publisher;
-    private String assignee; // "" 表示无人领取
+    private String assignee;
     private String level;
     private String details;
+    private String status; // "未接"、"进行中"、"已完成"
 
     public Task() {}
 
@@ -18,9 +16,9 @@ public class Task {
         this.assignee = assignee;
         this.level = level;
         this.details = details;
+        this.status = "未接";
     }
 
-    // getters and setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
@@ -35,4 +33,19 @@ public class Task {
 
     public String getDetails() { return details; }
     public void setDetails(String details) { this.details = details; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id='" + id + '\'' +
+                ", publisher='" + publisher + '\'' +
+                ", assignee='" + assignee + '\'' +
+                ", level='" + level + '\'' +
+                ", details='" + details + '\'' +
+                ", status='" + status + '\'' +
+                '}';
+    }
 }
