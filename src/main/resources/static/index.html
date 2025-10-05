@@ -179,7 +179,7 @@
     let username = '';
     let allTasks = [];
 
-    const PAGE_SIZE = 5;
+    const PAGE_SIZE = 10;
     let publicPage = 1;
     let activePage = 1;
 
@@ -250,7 +250,20 @@
                     });
                 }
 
-                alert(`已成功发布 ${tasks.length} 个任务`);
+                alert(`已成功发布 ${tasks.length} 个任务，发布信息已写入剪贴板`);
+
+                // 构造要复制的文本
+                const clipboardText = `我在 frp-oil.com:35882 发布了 ${tasks.length} 个任务，速抢，手慢无！`;
+
+                // 写入剪贴板
+                navigator.clipboard.writeText(clipboardText)
+                    .then(() => {
+                        console.log('文本已复制到剪贴板');
+                    })
+                    .catch(err => {
+                        console.error('复制失败:', err);
+                    });
+
                 bulkText.value = '';
                 exitBulkMode();
 
@@ -286,25 +299,77 @@
         const tasks = [];
 
         for (const line of lines) {
-            let match = line.match(/^(L\d+)\s+(.+?)\s*\+\d+/);
+            // 匹配 L 开头的部分 + 任务描述 + +数字（允许中间有空格/不可见字符）
+            let match = line.match(/^(L\S*)\s+(.+?)\s*\+\s*(\d+)/);
             if (match) {
-                tasks.push({
-                    level: match[1],
-                    details: match[2].trim()
-                });
-                continue;
-            }
-            match = line.match(/^(L☠️)\s+(.+)/);
-            if (match) {
+                let level = match[1].trim();
                 let details = match[2].trim();
+                const actualLevel = match[3].trim(); // + 后面的数字
+
+                // 如果 L 后面不是纯数字，则替换为 L+实际等级数字
+                if (!/^L\d+$/.test(level)) {
+                    level = `L${actualLevel}`;
+                }
+
+                // 查找形如 数字Ax数字B/数字C 的文本
+                details = details.replace(/(\d+)x(\d+)\/(\d+)/g, (full, A, B, C) => {
+                    // 计算提示信息
+                    const percentage = (parseInt(C) * 100 / parseInt(A) / parseInt(B)).toFixed(2);
+                    // 构造超链接 + 追加提示信息，target="_blank" 在新标签页打开
+                    return `<a href="https://minesweeper.online/cn/start/${full}" target="_blank" rel="noopener noreferrer">${full}</a> (${percentage}%)`;
+                });
+
+                // 直接在代码里定义 Hyperlink 数据，别问，问就是其他做法太麻烦或者我不会，反正 wom 几百年加一个玩法
+                const hyperlinkData = [
+                    {"初级": "https://minesweeper.online/cn/start/1"},
+                    {"中级": "https://minesweeper.online/cn/start/2"},
+                    {"高级": "https://minesweeper.online/cn/start/3"},
+                    {"Beginner": "https://minesweeper.online/cn/start/1"},
+                    {"Intermediate": "https://minesweeper.online/cn/start/2"},
+                    {"Expert": "https://minesweeper.online/cn/start/3"},
+                    {"简单": "https://minesweeper.online/cn/start/11"},
+                    {"中等": "https://minesweeper.online/cn/start/12"},
+                    {"困难": "https://minesweeper.online/cn/start/13"},
+                    {"地狱": "https://minesweeper.online/cn/start/14"},
+                    {"pvp": "https://minesweeper.online/cn/pvp"},
+                    {"Easy": "https://minesweeper.online/cn/start/11"},
+                    {"Medium": "https://minesweeper.online/cn/start/12"},
+                    {"Hard": "https://minesweeper.online/cn/start/13"},
+                    {"Evil": "https://minesweeper.online/cn/start/14"}
+                ]
+
+                // 构造 Map 方便快速查找
+                const hyperlinkMap = new Map();
+                for (const item of hyperlinkData) {
+                    const key = Object.keys(item)[0];
+                    const value = item[key];
+                    hyperlinkMap.set(key, value);
+                }
+
+                // 替换 details 中的关键词为超链接
+                function replaceHyperlinks(details) {
+                    for (const [text, url] of hyperlinkMap.entries()) {
+                        const regex = new RegExp(text, 'g'); // 全局匹配
+                        details = details.replace(regex, `<a href="${url}" target="_blank" rel="noopener noreferrer">${text}</a>`);
+                    }
+                    return details;
+                }
+
+                details = replaceHyperlinks(details);
+
                 tasks.push({
-                    level: match[1],
+                    level: level,
                     details: details
                 });
             }
         }
+
         return tasks;
     }
+
+
+
+
     function loadNameToInput() { const stored = localStorage.getItem('mq_username') || ''; document.getElementById('username').value = stored; }
     // WebSocket 初始化
     function connectWS() {
