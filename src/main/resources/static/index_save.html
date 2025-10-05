@@ -2,14 +2,10 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8" />
-    <title>Minesweeper Quest</title>
+    <title>任务广场 - MinesweeperQuest</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
-    <link rel="icon" type="image/png" sizes="16x16" href="moh16.png">
-    <link rel="icon" type="image/png" sizes="48x48" href="moh48.png">
-    <link rel="icon" type="image/png" sizes="128x128" href="moh128.png">
-<!--    <link rel="apple-touch-icon" sizes="128x128" href="moh128.png"> 没搞懂这个的用途-->
     <style>
         body {
             font-family: "Microsoft Yahei", sans-serif;
@@ -46,53 +42,14 @@
             cursor: pointer;
             font-size: 14px;
             color: #fff;
-            transition: all 0.2s ease;
-            position: relative;
-            overflow: hidden;
         }
-        /* 点击动画效果 */
-        .btn:active {
-            transform: scale(0.95);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-
-        /* 加载状态 */
-        .btn-loading {
-            position: relative;
-            color: transparent !important;
-        }
-
-        .btn-loading::after {
-            content: "";
-            position: absolute;
-            width: 16px;
-            height: 16px;
-            top: 50%;
-            left: 50%;
-            margin-left: -8px;
-            margin-top: -8px;
-            border: 2px solid #ffffff;
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-
         .btn-accept { background: #28a745; }
         .btn-unclaim { background: #ffc107; color: #000; }
         .btn-delete { background: #dc3545; }
         .btn-complete { background: #007bff; }
-        /* 禁用状态 */
-        .btn:disabled {
-            opacity: 0.6;
+        .btn-disabled {
+            color: #666; /* 灰色文字 */
             cursor: not-allowed;
-            transform: none !important;
         }
         .pagination {
             margin-top: 10px;
@@ -105,7 +62,7 @@
 </head>
 
 <body>
-<h1>Minesweeper Quest</h1>
+<h1>任务广场</h1>
 
 <div>
     <label>用户名：</label>
@@ -116,9 +73,9 @@
 <div id="publishArea" style="display:none; margin-top: 20px;">
     <h2>发布任务</h2>
     <input id="level" placeholder="任务等级" />
-    <input id="details" placeholder="任务详情" style="width:250px;" />
+    <input id="details" placeholder="任务详情" style="width:400px;" />
     <button id="publishBtn" class="btn btn-accept">发布</button>
-    <button id="bulkPublishBtn" class="btn btn-accept">批量发布</button>
+    <button id="bulkPublishBtn">批量发布</button>
 
     <!-- 批量输入框（默认隐藏） -->
     <div id="bulkInputContainer" style="display: none; margin-top: 8px;">
@@ -130,13 +87,7 @@
 <h2>我发布的任务</h2>
 <table id="myTasks">
     <thead>
-    <tr>
-        <th style="width:7.5%">等级</th>
-        <th style="width:50%">详情</th>
-        <th style="width:15%">接收者</th>
-        <th style="width:15%">状态</th>
-        <th style="width:12.5%">操作</th>
-    </tr>
+    <tr><th>等级</th><th>详情</th><th>接收者</th><th>状态</th><th>操作</th></tr>
     </thead>
     <tbody></tbody>
 </table>
@@ -144,12 +95,7 @@
 <h2>公屏任务</h2>
 <table id="publicTasks">
     <thead>
-    <tr>
-        <th style="width:7.5%">等级</th>
-        <th style="width:65%">详情</th>
-        <th style="width:15%">发布者</th>
-        <th style="width:12.5%">操作</th>
-    </tr>
+    <tr><th>发布者</th><th>等级</th><th>详情</th><th>状态</th><th>操作</th></tr>
     </thead>
     <tbody></tbody>
 </table>
@@ -158,14 +104,7 @@
 <h2>公屏已接任务</h2>
 <table id="activeTasks">
     <thead>
-    <tr>
-        <th style="width:7.5%">等级</th>
-        <th style="width:45%">详情</th>
-        <th style="width:10%">发布者</th>
-        <th style="width:10%">接收者</th>
-        <th style="width:15%">状态</th>
-        <th style="width:12.5%">操作</th>
-    </tr>
+    <tr><th>发布者</th><th>等级</th><th>详情</th><th>接收者</th><th>状态</th><th>操作</th></tr>
     </thead>
     <tbody></tbody>
 </table>
@@ -189,32 +128,13 @@
     const bulkBtn = document.getElementById('bulkPublishBtn');
     const bulkBox = document.getElementById('bulkInputContainer');
     const bulkText = document.getElementById('bulkInput');
-    let pendingConfirm = null; // 记录待确认的操作
 
-    // 清除确认状态
-    function clearConfirmState() {
-        if (pendingConfirm) {
-            const { button, originalClass, originalText } = pendingConfirm;
-            button.className = originalClass;
-            button.textContent = originalText;
-            button.style.border = '';
-            pendingConfirm = null;
-        }
-    }
-
-    // 点击页面其他地方时清除确认状态
-    document.addEventListener('click', (e) => {
-        if (pendingConfirm && !pendingConfirm.button.contains(e.target)) {
-            clearConfirmState();
-        }
-    });
     bulkBtn.addEventListener('click', async (e) => {
         e.stopPropagation(); // 防止触发点击页面关闭
         if (!bulkMode) {
             // 进入批量模式
             bulkMode = true;
-            bulkBtn.textContent = '确定发布';
-            bulkBtn.style.backgroundColor = '';
+            bulkBtn.style.backgroundColor = '#ff9800'; // 橙色提示
             bulkBox.style.display = 'block';
             bulkText.focus();
         } else {
@@ -225,28 +145,21 @@
                 return;
             }
 
-            // 禁用按钮（使用新的动画样式）
-            bulkBtn.classList.add('btn-loading');
-            bulkBtn.disabled = true;
-
             try {
                 // 调用你的函数处理文本
                 const tasks = await processBulkTasks(rawText);
                 if (!Array.isArray(tasks)) {
                     alert('processBulkTasks 未返回任务数组');
-                    // 启用按钮
-                    bulkBtn.classList.remove('btn-loading');
-                    bulkBtn.disabled = false;
                     return;
                 }
 
                 // 循环发布每个任务
                 for (const t of tasks) {
-                    if (!t.details) continue; // 必须有详情
-                    await axios.post('/api/tasks', {
-                        publisher: username,
-                        level: t.level || 'L1',
-                        details: t.details
+                    if (!t.title) continue; // 必须有标题
+                    await axios.post('/api/tasks/add', {
+                        title: t.title,
+                        level: t.level || 1,
+                        publisher: localStorage.getItem('mq_username') || '匿名',
                     });
                 }
 
@@ -257,9 +170,6 @@
             } catch (err) {
                 console.error(err);
                 alert('批量发布时出错，请查看控制台');
-                // 出错时也启用按钮
-                bulkBtn.classList.remove('btn-loading');
-                bulkBtn.disabled = false;
             }
         }
     });
@@ -273,12 +183,8 @@
 
     function exitBulkMode() {
         bulkMode = false;
-        bulkBtn.textContent = '批量发布';
         bulkBtn.style.backgroundColor = '';
         bulkBox.style.display = 'none';
-        // 确保按钮恢复可用状态
-        bulkBtn.classList.remove('btn-loading');
-        bulkBtn.disabled = false;
     }
 
     async function processBulkTasks(text) {
@@ -288,19 +194,13 @@
         for (const line of lines) {
             let match = line.match(/^(L\d+)\s+(.+?)\s*\+\d+/);
             if (match) {
-                tasks.push({
-                    level: match[1],
-                    details: match[2].trim()
-                });
+                tasks.push({ level: match[1], detail: match[2].trim() });
                 continue;
             }
             match = line.match(/^(L☠️)\s+(.+)/);
             if (match) {
-                let details = match[2].trim();
-                tasks.push({
-                    level: match[1],
-                    details: details
-                });
+                let detail = match[2].trim();
+                tasks.push({ level: match[1], detail });
             }
         }
         return tasks;
@@ -363,8 +263,8 @@
         const pageData = data.slice((publicPage - 1) * PAGE_SIZE, publicPage * PAGE_SIZE);
         pageData.forEach(t => {
             const tr = document.createElement('tr');
-            const opHTML = `<button class="btn btn-accept" onclick="addButtonFeedback(this, () => acceptTask('${t.id}'))">接受任务</button>`;
-            tr.innerHTML = `<td>${t.level}</td><td>${t.details}</td><td>${t.publisher}</td><td>${opHTML}</td>`;
+            const opHTML = `<button class="btn btn-accept" onclick="acceptTask('${t.id}')">接受任务</button>`;
+            tr.innerHTML = `<td>${t.publisher}</td><td>${t.level}</td><td>${t.details}</td><td>${t.status}</td><td>${opHTML}</td>`;
             tbody.appendChild(tr);
         });
         renderPagination('publicPagination', publicPage, totalPages, p => { publicPage = p; renderPublicTasks(); });
@@ -393,7 +293,7 @@
                 opHTML = '-';
             }
             const tr = document.createElement('tr');
-            tr.innerHTML = `<td>${t.level}</td><td>${t.details}</td><td>${t.publisher}</td><td>${t.assignee}</td><td>${t.status}</td><td>${opHTML}</td>`;
+            tr.innerHTML = `<td>${t.publisher}</td><td>${t.level}</td><td>${t.details}</td><td>${t.assignee}</td><td>${t.status}</td><td>${opHTML}</td>`;
             tbody.appendChild(tr);
         });
         renderPagination('activePagination', activePage, totalPages, p => { activePage = p; renderActiveTasks(); });
@@ -431,132 +331,23 @@
         await axios.post(`/api/tasks/${id}/unclaim`, { user: username });
     }
 
-    function completeTask(id) {
-        const button = event.target;
-
-        // 如果是确认状态
-        if (pendingConfirm && pendingConfirm.id === id && pendingConfirm.type === 'complete') {
-            clearConfirmState();
-            // 执行实际的操作
-            addButtonFeedback(button, () => axios.post(`/api/tasks/${id}/complete`, { user: username }));
-            return;
-        }
-
-        // 第一次点击，进入确认状态
-        clearConfirmState(); // 清除其他可能的确认状态
-
-        pendingConfirm = {
-            id: id,
-            type: 'complete',
-            button: button,
-            originalClass: button.className,
-            originalText: button.textContent
-        };
-
-        button.className = 'btn btn-complete';
-        button.textContent = '确定完成';
-        button.style.border = '3px solid black';
+    async function completeTask(id) {
+        await axios.post(`/api/tasks/${id}/complete`, { user: username });
     }
 
-    function deleteTask(id) {
-        const button = event.target;
-
-        // 如果是确认状态
-        if (pendingConfirm && pendingConfirm.id === id && pendingConfirm.type === 'delete') {
-            clearConfirmState();
-            // 执行实际的操作
-            addButtonFeedback(button, () => axios.post(`/api/tasks/${id}/delete`, { user: username }));
-            return;
-        }
-
-        // 第一次点击，进入确认状态
-        clearConfirmState(); // 清除其他可能的确认状态
-
-        pendingConfirm = {
-            id: id,
-            type: 'delete',
-            button: button,
-            originalClass: button.className,
-            originalText: button.textContent
-        };
-
-        button.className = 'btn btn-delete';
-        button.textContent = '确定撤下';
-        button.style.border = '3px solid black';
+    async function deleteTask(id) {
+        await axios.post(`/api/tasks/${id}/delete`, { user: username });
     }
 
     // 用户设置
-    // 用户设置
-    function setUsername() {
+    document.getElementById('setUser').onclick = () => {
         username = document.getElementById('username').value.trim();
         if (!username) return alert('请输入用户名');
-        localStorage.setItem('mq_username', username); // 保存到本地存储
         document.getElementById('publishArea').style.display = 'block';
         fetchTasks();
         connectWS();
-    }
-
-    document.getElementById('setUser').onclick = (e) => {
-        addButtonFeedback(e.target, () => {
-            setUsername();
-        });
     };
-
-    // 页面加载时自动设置用户名（如果有保存的用户名）
-    window.addEventListener('load', () => {
-        loadNameToInput();
-        const storedUsername = localStorage.getItem('mq_username');
-        if (storedUsername && storedUsername.trim()) {
-            setUsername();
-        }
-    });
-    document.getElementById('publishBtn').onclick = (e) => {
-        addButtonFeedback(e.target, () => {
-            return publishTask();
-        });
-    };
-
-    // 通用按钮点击反馈函数
-    function addButtonFeedback(button, callback) {
-        // 保存原始内容
-        const originalHTML = button.innerHTML;
-        const originalClass = button.className;
-
-        // 添加加载状态
-        button.classList.add('btn-loading');
-        button.disabled = true;
-
-        try {
-            // 执行回调函数
-            if (callback) {
-                const result = callback();
-                if (result && typeof result.then === 'function') {
-                    // 如果是Promise，等待完成后恢复按钮
-                    result.finally(() => {
-                        button.classList.remove('btn-loading');
-                        button.disabled = false;
-                        button.innerHTML = originalHTML;
-                        button.className = originalClass;
-                    });
-                } else {
-                    // 如果不是Promise，立即恢复按钮
-                    setTimeout(() => {
-                        button.classList.remove('btn-loading');
-                        button.disabled = false;
-                        button.innerHTML = originalHTML;
-                        button.className = originalClass;
-                    }, 300);
-                }
-            }
-        } catch (error) {
-            // 出错时恢复按钮
-            button.classList.remove('btn-loading');
-            button.disabled = false;
-            button.innerHTML = originalHTML;
-            button.className = originalClass;
-            throw error;
-        }
-    }
+    document.getElementById('publishBtn').onclick = publishTask;
 </script>
 </body>
 </html>

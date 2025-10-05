@@ -1,36 +1,36 @@
 [ {
-  "id" : "2f106388-2988-40b8-a4bb-0bc6b7fdc2ed",
+  "id" : "daf9bb10-eee8-4c6e-ab4d-55c842dd9e22",
   "publisher" : "McFlurry",
   "assignee" : "",
-  "level" : "L100",
-  "details" : "测试",
+  "level" : "L12",
+  "details" : "Earn 30000 experience points",
   "status" : "未接"
 }, {
-  "id" : "0fda9449-875c-4db9-9cbf-a4a014d26429",
-  "publisher" : "onion",
-  "assignee" : "",
-  "level" : "L5",
-  "details" : "完成一局高级",
-  "status" : "未接"
-}, {
-  "id" : "5f2675ac-7529-4422-9942-210a5546d3de",
-  "publisher" : "X-Bow",
-  "assignee" : "",
-  "level" : "L8E",
-  "details" : "TOP SECRET",
-  "status" : "未接"
-}, {
-  "id" : "60309e0d-2917-4fd7-b675-25ba364a01a0",
-  "publisher" : "Hollow Knight",
-  "assignee" : "Galaxy",
-  "level" : "L1",
-  "details" : "完成 999999 局地狱 NG",
-  "status" : "进行中"
-}, {
-  "id" : "d44aacef-b7ec-4071-bf1e-99c1ff008ab5",
+  "id" : "63461457-b033-4cc1-be34-8b91d7c6908a",
   "publisher" : "McFlurry",
   "assignee" : "Galaxy",
-  "level" : "L01",
-  "details" : "测试",
+  "level" : "L13",
+  "details" : "Earn 3250 minecoins",
   "status" : "已完成"
+}, {
+  "id" : "54644575-372d-4fd7-b4af-b73061c56b9c",
+  "publisher" : "McFlurry",
+  "assignee" : "",
+  "level" : "L22",
+  "details" : "Win 6 Intermediate level games with an efficiency of 110% or above",
+  "status" : "未接"
+}, {
+  "id" : "0878084a-bc98-462e-9df3-a7e20ab22115",
+  "publisher" : "McFlurry",
+  "assignee" : "",
+  "level" : "L20",
+  "details" : "Win 6 Intermediate level games in a row",
+  "status" : "未接"
+}, {
+  "id" : "bac215a4-3e27-46f8-b012-81299438c08f",
+  "publisher" : "McFlurry",
+  "assignee" : "",
+  "level" : "L17",
+  "details" : "Win 30 Intermediate level games",
+  "status" : "未接"
 } ]
