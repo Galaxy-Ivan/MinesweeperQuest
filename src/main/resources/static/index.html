@@ -437,8 +437,13 @@
     function renderMyTasks() {
         const tbody = document.querySelector('#myTasks tbody');
         tbody.innerHTML = '';
+        const order = { '已接': 0, '未接': 1, '已完成': 2 };
         allTasks.filter(t => t.publisher === username)
-            .sort((a, b) => (a.id < b.id ? 1 : -1))
+            .sort((a, b) => {
+                const statusDiff = order[a.status] - order[b.status];
+                if (statusDiff !== 0) return statusDiff; // 按 status 排序
+                return b.id - a.id; // 如果 status 一样，再按 id 降序
+            })
             .forEach(t => {
                 const tr = document.createElement('tr');
                 let opHTML = '';
@@ -462,7 +467,7 @@
         const isSuperUser = username === 'McFlurry!';
         const data = allTasks
             .filter(t => t.status === '未接' && (isSuperUser || t.publisher !== username))
-            .sort((a, b) => (a.id < b.id ? 1 : -1));
+            .sort((a, b) => (a.publisher < b.publisher ? 1 : -1));
 
         const totalPages = Math.ceil(data.length / PAGE_SIZE);
         const pageData = data.slice((publicPage - 1) * PAGE_SIZE, publicPage * PAGE_SIZE);
@@ -492,14 +497,20 @@
         // 在 TaskService.java 中，有对这个字符串的二次校验，若需修改，两个地方都要改
         const isSuperUser = username === 'McFlurry!';
         const myFirst = [];
+        const mySecond = [];
         const others = [];
 
         allTasks.filter(t => t.status !== '未接').forEach(t => {
-            if (t.assignee === username && t.status !== '已完成') myFirst.push(t);
+            if (t.assignee === username) {
+                if (t.status !== '已完成')
+                    myFirst.push(t);
+                else
+                    mySecond.push(t);
+            }
             else others.push(t);
         });
 
-        const data = [...myFirst, ...others];
+        const data = [...myFirst, ...mySecond, ...others];
         const totalPages = Math.ceil(data.length / PAGE_SIZE);
         const pageData = data.slice((activePage - 1) * PAGE_SIZE, activePage * PAGE_SIZE);
 

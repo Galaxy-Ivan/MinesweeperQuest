@@ -1,1 +1,582 @@
-[ ]
+[ {
+  "id" : "72ca19e7-8aee-4a15-8e51-3111518d0120",
+  "publisher" : "McFlurry",
+  "assignee" : "X-Bow",
+  "level" : "L14",
+  "details" : "盲扫完成 3 局 <a href=\"https://minesweeper.online/cn/start/3\" target=\"_blank\" rel=\"noopener noreferrer\">高级</a>",
+  "status" : "已完成"
+}, {
+  "id" : "ae8eafdf-ed72-4d09-96ed-5cd32c8d1300",
+  "publisher" : "McFlurry",
+  "assignee" : "yuqiao",
+  "level" : "L13",
+  "details" : "完成 20 局 <a href=\"https://minesweeper.online/cn/start/2\" target=\"_blank\" rel=\"noopener noreferrer\">中级</a>",
+  "status" : "已完成"
+}, {
+  "id" : "6127b661-c743-40a8-9dc9-8d15ae4820f8",
+  "publisher" : "McFlurry",
+  "assignee" : "NAIEN",
+  "level" : "L33",
+  "details" : "完成 8 局效率达到 110% 的 <a href=\"https://minesweeper.online/cn/start/2\" target=\"_blank\" rel=\"noopener noreferrer\">中级</a>",
+  "status" : "已完成"
+}, {
+  "id" : "e50223b2-3cb7-47d1-ab1d-5c6863d8f757",
+  "publisher" : "McFlurry",
+  "assignee" : "klos",
+  "level" : "L14",
+  "details" : "完成 4 局 <a href=\"https://minesweeper.online/cn/start/3\" target=\"_blank\" rel=\"noopener noreferrer\">高级</a>",
+  "status" : "已完成"
+}, {
+  "id" : "7057333c-49d0-415c-b569-782091b0494a",
+  "publisher" : "McFlurry",
+  "assignee" : "SDXX",
+  "level" : "L13",
+  "details" : "完成一次 L3 高难度 或更高等级的竞技场",
+  "status" : "已完成"
+}, {
+  "id" : "c184fca6-7e7f-4f1f-8745-d2ee56bb4706",
+  "publisher" : "McFlurry",
+  "assignee" : "dshy",
+  "level" : "L21",
+  "details" : "获得 21 个宝石",
+  "status" : "已完成"
+}, {
+  "id" : "5c28e4f9-f936-413a-b8b2-c09adcdb6ea2",
+  "publisher" : "McFlurry",
+  "assignee" : "",
+  "level" : "L66",
+  "details" : "完成一局 <a href=\"https://minesweeper.online/cn/start/43x30/304\" target=\"_blank\" rel=\"noopener noreferrer\">43x30/304</a> (23.57%) 自定义",
+  "status" : "未接"
+}, {
+  "id" : "e14078a2-e7a9-4633-a724-b38a43a947c4",
+  "publisher" : "X-Bow",
+  "assignee" : "NAIEN",
+  "level" : "L22",
+  "details" : "Complete 12 games in PvP mode",
+  "status" : "已完成"
+}, {
+  "id" : "8fe6c5b0-6ac9-438f-af87-4de1106edf6f",
+  "publisher" : "X-Bow",
+  "assignee" : "",
+  "level" : "L30",
+  "details" : "Win 6 <a href=\"https://minesweeper.online/cn/start/14\" target=\"_blank\" rel=\"noopener noreferrer\">Evil</a> NG level games with no flags",
+  "status" : "未接"
+}, {
+  "id" : "83597759-d3f2-4066-923c-4ad0a8ea2b28",
+  "publisher" : "X-Bow",
+  "assignee" : "dshy",
+  "level" : "L34",
+  "details" : "Win 10 <a href=\"https://minesweeper.online/cn/start/14\" target=\"_blank\" rel=\"noopener noreferrer\">Evil</a> NG level games without hints",
+  "status" : "已完成"
+}, {
+  "id" : "b9e989f0-0acc-4230-b006-a00105b1c51f",
+  "publisher" : "X-Bow",
+  "assignee" : "dshy",
+  "level" : "L66",
+  "details" : "Earn 330 arena coins",
+  "status" : "已完成"
+}, {
+  "id" : "db6483a7-b13f-4c36-a53a-775923da4bd9",
+  "publisher" : "X-Bow",
+  "assignee" : "Hollow Knight",
+  "level" : "L21",
+  "details" : "Find 21 gems",
+  "status" : "已完成"
+}, {
+  "id" : "7b1bbf58-85f3-40b2-800f-d78ee472a676",
+  "publisher" : "X-Bow",
+  "assignee" : "NAIEN",
+  "level" : "L23",
+  "details" : "Win an <a href=\"https://minesweeper.online/cn/start/3\" target=\"_blank\" rel=\"noopener noreferrer\">Expert</a> level game with an efficiency of 105% or above",
+  "status" : "已完成"
+}, {
+  "id" : "f74cfac8-442c-4ab8-a106-ca1fbfc8fa0d",
+  "publisher" : "X-Bow",
+  "assignee" : "Nihil",
+  "level" : "L36",
+  "details" : "Win 12 <a href=\"https://minesweeper.online/cn/start/3\" target=\"_blank\" rel=\"noopener noreferrer\">Expert</a> level games",
+  "status" : "已完成"
+}, {
+  "id" : "acf082dd-5ad3-45bb-a6ee-345dd16ab4c3",
+  "publisher" : "X-Bow",
+  "assignee" : "yuqiao",
+  "level" : "L20",
+  "details" : "Win 30 <a href=\"https://minesweeper.online/cn/start/2\" target=\"_blank\" rel=\"noopener noreferrer\">Intermediate</a> level games",
+  "status" : "进行中"
+}, {
+  "id" : "419b1e9f-2dd7-4f62-a2cb-82f158c9e213",
+  "publisher" : "X-Bow",
+  "assignee" : "飞羽QAQ",
+  "level" : "L23",
+  "details" : "Earn 57500 experience points",
+  "status" : "进行中"
+}, {
+  "id" : "eeb0ed22-8a83-4e84-a45f-c917660fa953",
+  "publisher" : "X-Bow",
+  "assignee" : "klos",
+  "level" : "L20",
+  "details" : "Earn 5000 minecoins",
+  "status" : "进行中"
+}, {
+  "id" : "3141c009-c12d-4636-9446-953eda1e0497",
+  "publisher" : "X-Bow",
+  "assignee" : "",
+  "level" : "L19",
+  "details" : "Win 2 <a href=\"https://minesweeper.online/cn/start/3\" target=\"_blank\" rel=\"noopener noreferrer\">Expert</a> level games in a row",
+  "status" : "未接"
+}, {
+  "id" : "424ce597-5171-43c5-be4d-341319c1ec6e",
+  "publisher" : "X-Bow",
+  "assignee" : "McFlurry",
+  "level" : "L66",
+  "details" : "Win a custom game with a size of <a href=\"https://minesweeper.online/cn/start/52x49/537\" target=\"_blank\" rel=\"noopener noreferrer\">52x49/537</a> (21.08%)",
+  "status" : "已完成"
+}, {
+  "id" : "73f7aa73-223a-493e-8fe6-64f2154f0c11",
+  "publisher" : "X-Bow",
+  "assignee" : "",
+  "level" : "L26",
+  "details" : "Win 6 <a href=\"https://minesweeper.online/cn/start/3\" target=\"_blank\" rel=\"noopener noreferrer\">Expert</a> level games with no flags",
+  "status" : "未接"
+}, {
+  "id" : "3952950e-7c0a-4327-b062-845b5d5a93a9",
+  "publisher" : "X-Bow",
+  "assignee" : "NAIEN",
+  "level" : "L37",
+  "details" : "Complete 20 games in PvP mode",
+  "status" : "已完成"
+}, {
+  "id" : "2db96a52-e27e-4c9e-9932-2eac536bffb8",
+  "publisher" : "X-Bow",
+  "assignee" : "",
+  "level" : "L26",
+  "details" : "Win 8 <a href=\"https://minesweeper.online/cn/start/14\" target=\"_blank\" rel=\"noopener noreferrer\">Evil</a> NG level games without hints",
+  "status" : "未接"
+}, {
+  "id" : "2126938b-dfe1-4d24-ab06-b9a2d50d59c2",
+  "publisher" : "X-Bow",
+  "assignee" : "klos",
+  "level" : "L24",
+  "details" : "Earn 120 arena coins",
+  "status" : "已完成"
+}, {
+  "id" : "a8cc66ec-0aff-4217-acb8-c0f2f5a49a7d",
+  "publisher" : "Nihil",
+  "assignee" : "NAIEN",
+  "level" : "L15",
+  "details" : "完成 8 局 PvP 模式游戏",
+  "status" : "已完成"
+}, {
+  "id" : "33043ea8-7ed8-4f19-8dc2-1ec4d215bed2",
+  "publisher" : "Nihil",
+  "assignee" : "dshy",
+  "level" : "L19",
+  "details" : "获取 4750 金币",
+  "status" : "已完成"
+}, {
+  "id" : "5c9758a4-6042-4561-991c-6c9f6d6323e6",
+  "publisher" : "Nihil",
+  "assignee" : "SDXX",
+  "level" : "L13",
+  "details" : "完成一次 L3 随机难度 或更高等级的竞技场",
+  "status" : "已完成"
+}, {
+  "id" : "a4321dfe-d7d2-418d-9d29-a50ae89927da",
+  "publisher" : "Nihil",
+  "assignee" : "X-Bow",
+  "level" : "L21",
+  "details" : "获取 52500 经验",
+  "status" : "已完成"
+}, {
+  "id" : "8b311bec-e481-4909-ac56-ee76bf5113cb",
+  "publisher" : "Nihil",
+  "assignee" : "McFlurry",
+  "level" : "L66",
+  "details" : "完成一局 <a href=\"https://minesweeper.online/cn/start/38x35/313\" target=\"_blank\" rel=\"noopener noreferrer\">38x35/313</a> (23.53%) 自定义",
+  "status" : "已完成"
+}, {
+  "id" : "ec38ebea-8e38-42e9-8dc0-47bd92eea97d",
+  "publisher" : "Nihil",
+  "assignee" : "yuqiao",
+  "level" : "L18",
+  "details" : "完成 30 局 <a href=\"https://minesweeper.online/cn/start/2\" target=\"_blank\" rel=\"noopener noreferrer\">中级</a>",
+  "status" : "已完成"
+}, {
+  "id" : "9db71e2b-cbf5-4a1f-9b18-7c34649c9228",
+  "publisher" : "dshy",
+  "assignee" : "Nihil",
+  "level" : "L28",
+  "details" : "Win 10 <a href=\"https://minesweeper.online/cn/start/3\" target=\"_blank\" rel=\"noopener noreferrer\">Expert</a> level games",
+  "status" : "已完成"
+}, {
+  "id" : "028635cb-8361-4299-9737-4abaf7979d82",
+  "publisher" : "dshy",
+  "assignee" : "NAIEN",
+  "level" : "L19",
+  "details" : "Complete 10 games in PvP mode",
+  "status" : "已完成"
+}, {
+  "id" : "be3ec3c0-0e9c-449b-a181-522918f07e9f",
+  "publisher" : "dshy",
+  "assignee" : "X-Bow",
+  "level" : "L93",
+  "details" : "Earn 23250 minecoins",
+  "status" : "已完成"
+}, {
+  "id" : "86ea3391-4481-4cef-86ae-fbe708463ac9",
+  "publisher" : "dshy",
+  "assignee" : "NAIEN",
+  "level" : "L24",
+  "details" : "Win an <a href=\"https://minesweeper.online/cn/start/3\" target=\"_blank\" rel=\"noopener noreferrer\">Expert</a> level game with an efficiency of 105% or above",
+  "status" : "已完成"
+}, {
+  "id" : "fc5b0cc8-5e90-4d73-91fc-285e63d7430c",
+  "publisher" : "dshy",
+  "assignee" : "yuqiao",
+  "level" : "L25",
+  "details" : "Earn 62500 experience points",
+  "status" : "已完成"
+}, {
+  "id" : "90c40a21-9eb7-419b-a677-0aff670421a6",
+  "publisher" : "dshy",
+  "assignee" : "klos",
+  "level" : "L31",
+  "details" : "Win 50 <a href=\"https://minesweeper.online/cn/start/2\" target=\"_blank\" rel=\"noopener noreferrer\">Intermediate</a> level games",
+  "status" : "已完成"
+}, {
+  "id" : "94c07a71-3a59-401f-88c4-aa019e3a4080",
+  "publisher" : "dshy",
+  "assignee" : "Hollow Knight",
+  "level" : "L18",
+  "details" : "Find 18 gems",
+  "status" : "已完成"
+}, {
+  "id" : "72cdd9e1-1d21-4062-bc1f-f314f4e2e3f9",
+  "publisher" : "dshy",
+  "assignee" : "klos",
+  "level" : "L17",
+  "details" : "Earn 80 arena coins",
+  "status" : "已完成"
+}, {
+  "id" : "a8b90b8f-6f9c-46f3-9ee0-92b867892ce0",
+  "publisher" : "dshy",
+  "assignee" : "klos",
+  "level" : "L72",
+  "details" : "Win 80 <a href=\"https://minesweeper.online/cn/start/2\" target=\"_blank\" rel=\"noopener noreferrer\">Intermediate</a> level games with no flags",
+  "status" : "已完成"
+}, {
+  "id" : "9424bb9d-03b8-4314-8840-99448ec58f69",
+  "publisher" : "dshy",
+  "assignee" : "Nihil",
+  "level" : "L18",
+  "details" : "Win 6 <a href=\"https://minesweeper.online/cn/start/3\" target=\"_blank\" rel=\"noopener noreferrer\">Expert</a> level games",
+  "status" : "已完成"
+}, {
+  "id" : "1cd43183-b6c4-4a04-8663-4a4c5acc520a",
+  "publisher" : "NAIEN",
+  "assignee" : "klos",
+  "level" : "L34",
+  "details" : "完成 60 局 <a href=\"https://minesweeper.online/cn/start/2\" target=\"_blank\" rel=\"noopener noreferrer\">中级</a>",
+  "status" : "已完成"
+}, {
+  "id" : "fbe7ae6d-0644-4ce7-98df-cc87cfcfbf22",
+  "publisher" : "NAIEN",
+  "assignee" : "yuqiao",
+  "level" : "L18",
+  "details" : "完成 10 局 PvP 模式游戏",
+  "status" : "已完成"
+}, {
+  "id" : "af13a392-2471-4f94-91e4-0b916809a4dc",
+  "publisher" : "NAIEN",
+  "assignee" : "Tiedan1248",
+  "level" : "L19",
+  "details" : "获取 47500 经验",
+  "status" : "已完成"
+}, {
+  "id" : "a955aedf-4cfe-45ae-a697-21a254625c77",
+  "publisher" : "NAIEN",
+  "assignee" : "Hollow Knight",
+  "level" : "L21",
+  "details" : "<a href=\"https://minesweeper.online/cn/start/3\" target=\"_blank\" rel=\"noopener noreferrer\">高级</a> 效率达到 105%",
+  "status" : "已完成"
+}, {
+  "id" : "19392f26-5d13-401a-a7c3-be986e067187",
+  "publisher" : "NAIEN",
+  "assignee" : "dshy",
+  "level" : "L20",
+  "details" : "不用提示完成 6 局 <a href=\"https://minesweeper.online/cn/start/14\" target=\"_blank\" rel=\"noopener noreferrer\">地狱</a> NG",
+  "status" : "已完成"
+}, {
+  "id" : "38ed010c-835a-455a-96da-869520c582b7",
+  "publisher" : "NAIEN",
+  "assignee" : "X-Bow",
+  "level" : "L27",
+  "details" : "盲扫完成 6 局 <a href=\"https://minesweeper.online/cn/start/3\" target=\"_blank\" rel=\"noopener noreferrer\">高级</a>",
+  "status" : "已完成"
+}, {
+  "id" : "b022ecf3-a62e-41d7-baa0-a296cf44bf98",
+  "publisher" : "NAIEN",
+  "assignee" : "Hollow Knight",
+  "level" : "L19",
+  "details" : "获得 19 个宝石",
+  "status" : "已完成"
+}, {
+  "id" : "b06e2edd-568a-4ee8-8593-09989a83112f",
+  "publisher" : "NAIEN",
+  "assignee" : "Nihil",
+  "level" : "L35",
+  "details" : "完成 12 局 <a href=\"https://minesweeper.online/cn/start/3\" target=\"_blank\" rel=\"noopener noreferrer\">高级</a>",
+  "status" : "已完成"
+}, {
+  "id" : "018488e3-9664-43d9-bbad-2281fc249613",
+  "publisher" : "NAIEN",
+  "assignee" : "Nihil",
+  "level" : "L35",
+  "details" : "获得 <a href=\"https://minesweeper.online/cn/start/3\" target=\"_blank\" rel=\"noopener noreferrer\">高级</a> 2 连胜",
+  "status" : "已完成"
+}, {
+  "id" : "14e41052-935f-4c28-a7b0-52c9bc01c456",
+  "publisher" : "NAIEN",
+  "assignee" : "klos",
+  "level" : "L26",
+  "details" : "完成 40 局 <a href=\"https://minesweeper.online/cn/start/2\" target=\"_blank\" rel=\"noopener noreferrer\">中级</a>",
+  "status" : "已完成"
+}, {
+  "id" : "d4796086-86df-4d53-96c7-19d20d310a3c",
+  "publisher" : "yuqiao",
+  "assignee" : "飞羽QAQ",
+  "level" : "L16",
+  "details" : "获取 40000 经验",
+  "status" : "进行中"
+}, {
+  "id" : "c090c46e-8ef5-4145-b454-bb7fafa11461",
+  "publisher" : "yuqiao",
+  "assignee" : "",
+  "level" : "L24",
+  "details" : "盲扫完成 5 局 <a href=\"https://minesweeper.online/cn/start/14\" target=\"_blank\" rel=\"noopener noreferrer\">地狱</a> NG",
+  "status" : "未接"
+}, {
+  "id" : "afe9ef2a-a110-4d48-85b6-26c556747a08",
+  "publisher" : "yuqiao",
+  "assignee" : "SDXX",
+  "level" : "L24",
+  "details" : "完成 180 局 <a href=\"https://minesweeper.online/cn/start/1\" target=\"_blank\" rel=\"noopener noreferrer\">初级</a>",
+  "status" : "已完成"
+}, {
+  "id" : "f32e7ca0-b9f3-4c5a-a224-0fbebee0b159",
+  "publisher" : "yuqiao",
+  "assignee" : "klos",
+  "level" : "L78",
+  "details" : "获取 19500 金币",
+  "status" : "已完成"
+}, {
+  "id" : "2912d71d-c171-4114-a6f2-65ff24553d1b",
+  "publisher" : "yuqiao",
+  "assignee" : "Tiedan1248",
+  "level" : "L14",
+  "details" : "完成 7 局效率达到 100% 的 <a href=\"https://minesweeper.online/cn/start/2\" target=\"_blank\" rel=\"noopener noreferrer\">中级</a>",
+  "status" : "已完成"
+}, {
+  "id" : "180f7328-c56c-4050-ab89-db12817cb2af",
+  "publisher" : "yuqiao",
+  "assignee" : "klos",
+  "level" : "L22",
+  "details" : "完成 35 局 <a href=\"https://minesweeper.online/cn/start/2\" target=\"_blank\" rel=\"noopener noreferrer\">中级</a>",
+  "status" : "已完成"
+}, {
+  "id" : "1039bc21-281c-46d4-b72a-c239f320c1fe",
+  "publisher" : "yuqiao",
+  "assignee" : "Nihil",
+  "level" : "L25",
+  "details" : "完成 8 局 <a href=\"https://minesweeper.online/cn/start/3\" target=\"_blank\" rel=\"noopener noreferrer\">高级</a>",
+  "status" : "已完成"
+}, {
+  "id" : "4b2055f5-995a-4876-9335-72bed74770ec",
+  "publisher" : "yuqiao",
+  "assignee" : "dshy",
+  "level" : "L26",
+  "details" : "不用提示完成 8 局 <a href=\"https://minesweeper.online/cn/start/14\" target=\"_blank\" rel=\"noopener noreferrer\">地狱</a> NG",
+  "status" : "进行中"
+}, {
+  "id" : "4d27e9a2-8c59-4b0c-9ab8-b473d972972c",
+  "publisher" : "yuqiao",
+  "assignee" : "NAIEN",
+  "level" : "L16",
+  "details" : "完成 8 局 PvP 模式游戏",
+  "status" : "已完成"
+}, {
+  "id" : "50d8a6b1-62fe-452b-97e7-ac401dcc7f29",
+  "publisher" : "LeviSeven",
+  "assignee" : "SDXX",
+  "level" : "L13",
+  "details" : "Win 20 <a href=\"https://minesweeper.online/cn/start/1\" target=\"_blank\" rel=\"noopener noreferrer\">Beginner</a> level games in a row",
+  "status" : "已完成"
+}, {
+  "id" : "1c2fa7b0-8897-4695-8e1d-2eaee7af9e14",
+  "publisher" : "LeviSeven",
+  "assignee" : "klos",
+  "level" : "L22",
+  "details" : "Win 22 <a href=\"https://minesweeper.online/cn/start/2\" target=\"_blank\" rel=\"noopener noreferrer\">Intermediate</a> level games with no flags",
+  "status" : "已完成"
+}, {
+  "id" : "5011751c-f98b-4456-bc8a-490caf46964e",
+  "publisher" : "SDXX",
+  "assignee" : "dshy",
+  "level" : "L31",
+  "details" : "Win 7 <a href=\"https://minesweeper.online/cn/start/14\" target=\"_blank\" rel=\"noopener noreferrer\">Evil</a> NG level games with no flags",
+  "status" : "已完成"
+}, {
+  "id" : "e56b0bcf-fc93-4d0b-835f-8d88ddb22d89",
+  "publisher" : "WDCXJJBDYCHHDSL",
+  "assignee" : "",
+  "level" : "L27",
+  "details" : "不用提示完成 14 局 <a href=\"https://minesweeper.online/cn/start/13\" target=\"_blank\" rel=\"noopener noreferrer\">困难</a> NG",
+  "status" : "未接"
+}, {
+  "id" : "84cda9b8-bb7d-4f94-ad32-b03bae9f4869",
+  "publisher" : "WDCXJJBDYCHHDSL",
+  "assignee" : "Nihil",
+  "level" : "L25",
+  "details" : "获得 <a href=\"https://minesweeper.online/cn/start/3\" target=\"_blank\" rel=\"noopener noreferrer\">高级</a> 2 连胜",
+  "status" : "进行中"
+}, {
+  "id" : "da777055-c839-4d09-933e-3eb438a4c565",
+  "publisher" : "WDCXJJBDYCHHDSL",
+  "assignee" : "dshy",
+  "level" : "L24",
+  "details" : "获取 6000 金币",
+  "status" : "进行中"
+}, {
+  "id" : "8312900b-d421-4b9d-9a74-b52b7e85bd17",
+  "publisher" : "WDCXJJBDYCHHDSL",
+  "assignee" : "",
+  "level" : "L18",
+  "details" : "不用提示完成 30 局 <a href=\"https://minesweeper.online/cn/start/12\" target=\"_blank\" rel=\"noopener noreferrer\">中等</a> NG",
+  "status" : "未接"
+}, {
+  "id" : "f8bf6b33-865c-4935-ae4d-66f7fef1a129",
+  "publisher" : "飞羽QAQ",
+  "assignee" : "Tiedan1248",
+  "level" : "L34",
+  "details" : "盲扫完成 7 局 <a href=\"https://minesweeper.online/cn/start/3\" target=\"_blank\" rel=\"noopener noreferrer\">高级</a>",
+  "status" : "已完成"
+}, {
+  "id" : "df006ec0-6fae-42c6-9a31-97ab96a5a873",
+  "publisher" : "飞羽QAQ",
+  "assignee" : "Nihil",
+  "level" : "L23",
+  "details" : "完成 7 局 <a href=\"https://minesweeper.online/cn/start/3\" target=\"_blank\" rel=\"noopener noreferrer\">高级</a>",
+  "status" : "已完成"
+}, {
+  "id" : "582ca21c-c538-440b-ad62-c910b9f53073",
+  "publisher" : "飞羽QAQ",
+  "assignee" : "",
+  "level" : "L21",
+  "details" : "获得 <a href=\"https://minesweeper.online/cn/start/3\" target=\"_blank\" rel=\"noopener noreferrer\">高级</a> 2 连胜",
+  "status" : "未接"
+}, {
+  "id" : "a38cccec-c3de-4fd2-932d-63743a57e746",
+  "publisher" : "飞羽QAQ",
+  "assignee" : "klos",
+  "level" : "L27",
+  "details" : "完成 14 局 PvP 模式游戏",
+  "status" : "进行中"
+}, {
+  "id" : "af09caec-7601-4ebb-b4f1-6a390953c9d0",
+  "publisher" : "飞羽QAQ",
+  "assignee" : "dshy",
+  "level" : "L23",
+  "details" : "不用提示完成 7 局 <a href=\"https://minesweeper.online/cn/start/14\" target=\"_blank\" rel=\"noopener noreferrer\">地狱</a> NG",
+  "status" : "进行中"
+}, {
+  "id" : "67e80626-f0ed-4706-94fb-f31106f5faf6",
+  "publisher" : "飞羽QAQ",
+  "assignee" : "yuqiao",
+  "level" : "L21",
+  "details" : "<a href=\"https://minesweeper.online/cn/start/3\" target=\"_blank\" rel=\"noopener noreferrer\">高级</a> 效率达到 105%",
+  "status" : "进行中"
+}, {
+  "id" : "2c0f2a8b-0ad0-46be-a6ae-202a8155ad3a",
+  "publisher" : "飞羽QAQ",
+  "assignee" : "",
+  "level" : "L33",
+  "details" : "完成 250 局 <a href=\"https://minesweeper.online/cn/start/1\" target=\"_blank\" rel=\"noopener noreferrer\">初级</a>",
+  "status" : "未接"
+}, {
+  "id" : "d9ac13e4-b06c-4dbd-9bd6-00b62cc68142",
+  "publisher" : "飞羽QAQ",
+  "assignee" : "",
+  "level" : "L66",
+  "details" : "完成一局 <a href=\"https://minesweeper.online/cn/start/58x55/646\" target=\"_blank\" rel=\"noopener noreferrer\">58x55/646</a> (20.25%) 自定义",
+  "status" : "未接"
+}, {
+  "id" : "8c95d026-97d2-4678-a324-df7c440b7bbf",
+  "publisher" : "飞羽QAQ",
+  "assignee" : "klos",
+  "level" : "L34",
+  "details" : "完成 60 局 <a href=\"https://minesweeper.online/cn/start/2\" target=\"_blank\" rel=\"noopener noreferrer\">中级</a>",
+  "status" : "已完成"
+}, {
+  "id" : "cf739914-56d4-491c-b854-d2ea94785889",
+  "publisher" : "飞羽QAQ",
+  "assignee" : "Nihil",
+  "level" : "L23",
+  "details" : "完成 7 局 <a href=\"https://minesweeper.online/cn/start/3\" target=\"_blank\" rel=\"noopener noreferrer\">高级</a>",
+  "status" : "进行中"
+}, {
+  "id" : "0d118924-f597-47ae-ba59-c04b20890f57",
+  "publisher" : "Hollow Knight",
+  "assignee" : "dshy",
+  "level" : "L7",
+  "details" : "Win 3 <a href=\"https://minesweeper.online/cn/start/13\" target=\"_blank\" rel=\"noopener noreferrer\">Hard</a> NG level games with no flags",
+  "status" : "进行中"
+}, {
+  "id" : "2585f50b-b584-4911-b088-7bcfc584bf45",
+  "publisher" : "Hollow Knight",
+  "assignee" : "",
+  "level" : "L66",
+  "details" : "Win a custom game with a size of <a href=\"https://minesweeper.online/cn/start/47x31/337\" target=\"_blank\" rel=\"noopener noreferrer\">47x31/337</a> (23.13%)",
+  "status" : "未接"
+}, {
+  "id" : "ee739f97-e001-4f75-8e34-bf9d374755c4",
+  "publisher" : "trixyz",
+  "assignee" : "NAIEN",
+  "level" : "L34",
+  "details" : "完成 18 局 PvP 模式游戏",
+  "status" : "已完成"
+}, {
+  "id" : "b15a5412-6a8b-44c6-b0ce-d913264bdd1a",
+  "publisher" : "trixyz",
+  "assignee" : "klos",
+  "level" : "L75",
+  "details" : "获得 75 个宝石",
+  "status" : "已完成"
+}, {
+  "id" : "1cc8d8d2-3477-41f5-926d-4e834ad1248e",
+  "publisher" : "trixyz",
+  "assignee" : "",
+  "level" : "L27",
+  "details" : "获得 <a href=\"https://minesweeper.online/cn/start/1\" target=\"_blank\" rel=\"noopener noreferrer\">初级</a> 27 连胜",
+  "status" : "未接"
+}, {
+  "id" : "753d46c9-c1d7-47be-a4bf-129996bc3fe4",
+  "publisher" : "trixyz",
+  "assignee" : "Nihil",
+  "level" : "L31",
+  "details" : "完成 10 局 <a href=\"https://minesweeper.online/cn/start/3\" target=\"_blank\" rel=\"noopener noreferrer\">高级</a>",
+  "status" : "已完成"
+}, {
+  "id" : "c69d1c46-a3e9-47cc-9140-f105d9e7ed19",
+  "publisher" : "trixyz",
+  "assignee" : "",
+  "level" : "L23",
+  "details" : "完成 180 局 <a href=\"https://minesweeper.online/cn/start/1\" target=\"_blank\" rel=\"noopener noreferrer\">初级</a>",
+  "status" : "未接"
+}, {
+  "id" : "a169542e-b555-4de7-a540-7941892c7d50",
+  "publisher" : "trixyz",
+  "assignee" : "",
+  "level" : "L26",
+  "details" : "不用提示完成 40 局 <a href=\"https://minesweeper.online/cn/start/12\" target=\"_blank\" rel=\"noopener noreferrer\">中等</a> NG",
+  "status" : "未接"
+} ]
