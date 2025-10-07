@@ -433,111 +433,41 @@
         renderActiveTasks();
     }
 
-    // === 排序状态管理 ===
-    const sortState = {
-        my: { key: null, asc: true },
-        public: { key: null, asc: true },
-        active: { key: null, asc: true },
-    };
-
-    // === 辅助：更新表头箭头提示 ===
-    function updateSortIndicators(tableSelector, type) {
-        const table = document.querySelector(tableSelector);
-        if (!table) return;
-        const s = sortState[type];
-        table.querySelectorAll('th').forEach((th, index) => {
-            th.innerHTML = th.dataset.original || th.innerText;
-            if (!th.dataset.original) th.dataset.original = th.innerText;
-            if (s.key === index) {
-                th.innerHTML += s.asc ? ' ⬆️' : ' ⬇️';
-            }
-        });
-    }
-
-    // === 辅助：绑定表头点击排序 ===
-    function enableTableSort(tableSelector, type, renderFn, columns) {
-        const table = document.querySelector(tableSelector);
-        if (!table) return;
-        table.querySelectorAll('th').forEach((th, index) => {
-            th.style.cursor = 'pointer';
-            th.onclick = () => {
-                const s = sortState[type];
-                if (s.key === index) s.asc = !s.asc; else s.asc = true;
-                s.key = index;
-                renderFn();
-            };
-        });
-    }
-
-    // === 我发布的任务 ===
+    // 我发布的任务
     function renderMyTasks() {
         const tbody = document.querySelector('#myTasks tbody');
         tbody.innerHTML = '';
         const order = { '进行中': 0, '未接': 1, '已完成': 2 };
-        let data = allTasks.filter(t => t.publisher === username);
-
-        // 排序逻辑
-        const s = sortState.my;
-        if (s.key != null) {
-            const columns = ['level', 'details', 'assignee', 'status'];
-            const key = columns[s.key];
-            const asc = s.asc ? 1 : -1;
-            data = data.slice().sort((a, b) => {
-                let av = a[key] ?? '';
-                let bv = b[key] ?? '';
-                if (key === 'assignee') { av = av || ''; bv = bv || ''; }
-                if (key === 'status') {
-                    av = order[av]; bv = order[bv];
+        allTasks.filter(t => t.publisher === username)
+            .sort((a, b) => {
+                const statusDiff = order[a.status] - order[b.status];
+                if (statusDiff !== 0) return statusDiff; // 按 status 排序
+                return b.id - a.id; // 如果 status 一样，再按 id 降序
+            })
+            .forEach(t => {
+                const tr = document.createElement('tr');
+                let opHTML = '';
+                if (t.status === '已完成') {
+                    opHTML = `<span class="btn-disabled">已完成</span>`;
+                } else if (t.status === '进行中') {
+                    opHTML = `<button class="btn btn-complete" onclick="completeTask('${t.id}')">已完成</button> <button class="btn btn-delete" onclick="deleteTask('${t.id}')">撤下</button>`;
+                } else {
+                    opHTML = `<button class="btn btn-delete" onclick="deleteTask('${t.id}')">撤下</button>`;
                 }
-                if (av > bv) return asc;
-                if (av < bv) return -asc;
-                return 0;
+                tr.innerHTML = `<td>${t.level}</td><td>${t.details}</td><td>${t.assignee || '-'}</td><td>${t.status}</td><td>${opHTML}</td>`;
+                tbody.appendChild(tr);
             });
-        } else {
-            data.sort((a, b) => order[a.status] - order[b.status] || (b.id > a.id ? 1 : -1));
-        }
-
-        data.forEach(t => {
-            const tr = document.createElement('tr');
-            let opHTML = '';
-            if (t.status === '已完成') {
-                opHTML = `<span class="btn-disabled">已完成</span>`;
-            } else if (t.status === '进行中') {
-                opHTML = `<button class="btn btn-complete" onclick="completeTask('${t.id}')">已完成</button> <button class="btn btn-delete" onclick="deleteTask('${t.id}')">撤下</button>`;
-            } else {
-                opHTML = `<button class="btn btn-delete" onclick="deleteTask('${t.id}')">撤下</button>`;
-            }
-            tr.innerHTML = `<td>${t.level}</td><td>${t.details}</td><td>${t.assignee || '-'}</td><td>${t.status}</td><td>${opHTML}</td>`;
-            tbody.appendChild(tr);
-        });
-
-        enableTableSort('#myTasks', 'my', renderMyTasks, ['level', 'details', 'assignee', 'status']);
-        updateSortIndicators('#myTasks', 'my');
     }
 
-    // === 公屏任务（未接的任务） ===
+    // 公屏任务（未接的任务）
     function renderPublicTasks() {
         const tbody = document.querySelector('#publicTasks tbody');
         tbody.innerHTML = '';
-        const isSuperUser = username === 'McFlurry!';
-        let data = allTasks.filter(t => t.status === '未接' && (isSuperUser || t.publisher !== username));
 
-        // 排序逻辑
-        const s = sortState.public;
-        if (s.key != null) {
-            const columns = ['level', 'details', 'publisher'];
-            const key = columns[s.key];
-            const asc = s.asc ? 1 : -1;
-            data = data.slice().sort((a, b) => {
-                const av = a[key] ?? '';
-                const bv = b[key] ?? '';
-                if (av > bv) return asc;
-                if (av < bv) return -asc;
-                return 0;
-            });
-        } else {
-            data.sort((a, b) => (a.publisher < b.publisher ? 1 : -1));
-        }
+        const isSuperUser = username === 'McFlurry!';
+        const data = allTasks
+            .filter(t => t.status === '未接' && (isSuperUser || t.publisher !== username))
+            .sort((a, b) => (a.publisher < b.publisher ? 1 : -1));
 
         const totalPages = Math.ceil(data.length / PAGE_SIZE);
         const pageData = data.slice((publicPage - 1) * PAGE_SIZE, publicPage * PAGE_SIZE);
@@ -545,81 +475,78 @@
         pageData.forEach(t => {
             const tr = document.createElement('tr');
             let opHTML = '';
+
             if (isSuperUser) {
+                // ✅ McFlurry! 可撤下所有未接任务
                 opHTML = `<button class="btn btn-delete" onclick="deleteTask('${t.id}')">撤下任务</button>`;
             } else {
                 opHTML = `<button class="btn btn-accept" onclick="addButtonFeedback(this, () => acceptTask('${t.id}'))">接受任务</button>`;
             }
+
             tr.innerHTML = `<td>${t.level}</td><td>${t.details}</td><td>${t.publisher}</td><td>${opHTML}</td>`;
             tbody.appendChild(tr);
         });
 
         renderPagination('publicPagination', publicPage, totalPages, p => { publicPage = p; renderPublicTasks(); });
-
-        enableTableSort('#publicTasks', 'public', renderPublicTasks, ['level', 'details', 'publisher']);
-        updateSortIndicators('#publicTasks', 'public');
     }
 
-    // === 公屏已接任务 ===
+    // 公屏已接任务（全部进行中或已完成）
     function renderActiveTasks() {
         const tbody = document.querySelector('#activeTasks tbody');
         tbody.innerHTML = '';
+        // 在 TaskService.java 中，有对这个字符串的二次校验，若需修改，两个地方都要改
         const isSuperUser = username === 'McFlurry!';
-        const myFirst = [], mySecond = [], waiting = [], others = [];
+        const myFirst = [];
+        const mySecond = [];
+        const wating = [];
+        const others = [];
 
         allTasks.filter(t => t.status !== '未接').forEach(t => {
             if (t.assignee === username) {
-                if (t.status !== '已完成') myFirst.push(t); else mySecond.push(t);
-            } else {
-                if (t.status === '进行中') waiting.push(t); else others.push(t);
+                if (t.status !== '已完成')
+                    myFirst.push(t);
+                else
+                    mySecond.push(t);
+            }
+            else {
+                if (t.status === '进行中')
+                    wating.push(t);
+                else
+                    others.push(t);
             }
         });
 
-        let data = [...myFirst, ...mySecond, ...waiting, ...others];
-
-        // 排序逻辑
-        const s = sortState.active;
-        if (s.key != null) {
-            const columns = ['level', 'details', 'publisher', 'assignee', 'status'];
-            const key = columns[s.key];
-            const asc = s.asc ? 1 : -1;
-            const orderStatus = { '进行中': 0, '未接': 1, '已完成': 2 };
-            data = data.slice().sort((a, b) => {
-                let av = a[key] ?? '';
-                let bv = b[key] ?? '';
-                if (key === 'status') { av = orderStatus[av]; bv = orderStatus[bv]; }
-                if (av > bv) return asc;
-                if (av < bv) return -asc;
-                return 0;
-            });
-        }
-
+        const data = [...myFirst, ...mySecond, ...wating, ...others];
         const totalPages = Math.ceil(data.length / PAGE_SIZE);
         const pageData = data.slice((activePage - 1) * PAGE_SIZE, activePage * PAGE_SIZE);
 
         pageData.forEach(t => {
             let opHTML = '';
+
             if (t.status === '已完成') {
                 opHTML = `<span class="btn-disabled">已完成</span>`;
             } else if (t.assignee === username) {
                 opHTML = `<button class="btn btn-unclaim" onclick="unclaimTask('${t.id}')">放弃任务</button> <button class="btn btn-complete" onclick="completeTask('${t.id}')">已完成</button>`;
             } else if (isSuperUser && t.status !== '已完成') {
+                // ✅ McFlurry! 可撤下任意未完成任务（包括别人发布、正在进行的）
                 opHTML = `<button class="btn btn-delete" onclick="deleteTask('${t.id}')">撤下任务</button>`;
             } else {
                 opHTML = '-';
             }
 
             const tr = document.createElement('tr');
-            tr.innerHTML = `<td>${t.level}</td><td>${t.details}</td><td>${t.publisher}</td><td>${t.assignee}</td><td>${t.status}</td><td>${opHTML}</td>`;
+            tr.innerHTML = `
+            <td>${t.level}</td>
+            <td>${t.details}</td>
+            <td>${t.publisher}</td>
+            <td>${t.assignee}</td>
+            <td>${t.status}</td>
+            <td>${opHTML}</td>`;
             tbody.appendChild(tr);
         });
 
         renderPagination('activePagination', activePage, totalPages, p => { activePage = p; renderActiveTasks(); });
-
-        enableTableSort('#activeTasks', 'active', renderActiveTasks, ['level', 'details', 'publisher', 'assignee', 'status']);
-        updateSortIndicators('#activeTasks', 'active');
     }
-
 
 
     // 分页组件
