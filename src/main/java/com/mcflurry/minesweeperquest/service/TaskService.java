@@ -106,7 +106,7 @@ public class TaskService {
         Optional<Task> opt = repo.findById(id);
         if (opt.isEmpty()) return false;
         Task t = opt.get();
-        if (!user.equals(t.getPublisher())) return false;
+        if ((!user.equals(t.getPublisher())) && (!user.equals(t.getAssignee()))) return false;
         if (!"进行中".equals(t.getStatus())) return false;
         t.setStatus("已完成");
         repo.update(t);
