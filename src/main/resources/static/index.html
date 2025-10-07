@@ -84,10 +84,12 @@
         }
 
 
-        .btn-accept { background: #28a745; }
-        .btn-unclaim { background: #ffc107; color: #000; }
+        .btn-accept { background: #1f854a; }
+        .btn-unclaim { background: #d69a00;}
         .btn-delete { background: #dc3545; }
         .btn-complete { background: #007bff; }
+        .btn-forceComplete { background: #a100ff; }
+        .btn-reserve { background: #d69a00;}
         /* 禁用状态 */
         .btn:disabled {
             opacity: 0.6;
@@ -473,7 +475,7 @@
     function renderMyTasks() {
         const tbody = document.querySelector('#myTasks tbody');
         tbody.innerHTML = '';
-        const order = { '进行中': 0, '未接': 1, '已完成': 2 };
+        const order = { '进行中': 0, '预约中': 1, '未接': 2, '已发送': 3 };
         let data = allTasks.filter(t => t.publisher === username);
 
         // 排序逻辑
@@ -486,9 +488,7 @@
                 let av = a[key] ?? '';
                 let bv = b[key] ?? '';
                 if (key === 'assignee') { av = av || ''; bv = bv || ''; }
-                if (key === 'status') {
-                    av = order[av]; bv = order[bv];
-                }
+                if (key === 'status') { av = order[av]; bv = order[bv]; }
                 if (av > bv) return asc;
                 if (av < bv) return -asc;
                 return 0;
@@ -500,11 +500,14 @@
         data.forEach(t => {
             const tr = document.createElement('tr');
             let opHTML = '';
-            if (t.status === '已完成') {
-                opHTML = `<span class="btn-disabled">已完成</span>`;
+            if (t.status === '预约中') {
+                opHTML = `<button class="btn btn-forceComplete" onclick="forceCompleteTask('${t.id}')">强行发送</button> <button class="btn btn-delete" onclick="deleteTask('${t.id}')">撤下</button>`;
+            } else if (t.status === '已发送') {
+                opHTML = `<span class="btn-disabled">已发送</span>`;
             } else if (t.status === '进行中') {
-                opHTML = `<button class="btn btn-complete" onclick="completeTask('${t.id}')">已完成</button> <button class="btn btn-delete" onclick="deleteTask('${t.id}')">撤下</button>`;
+                opHTML = `<button class="btn btn-complete" onclick="completeTask('${t.id}')">已发送</button> <button class="btn btn-delete" onclick="deleteTask('${t.id}')">撤下</button>`;
             } else {
+                // t.status === '未接'
                 opHTML = `<button class="btn btn-delete" onclick="deleteTask('${t.id}')">撤下</button>`;
             }
             tr.innerHTML = `<td>${t.level}</td><td>${t.details}</td><td>${t.assignee || '-'}</td><td>${t.status}</td><td>${opHTML}</td>`;
@@ -520,7 +523,7 @@
         const tbody = document.querySelector('#publicTasks tbody');
         tbody.innerHTML = '';
         const isSuperUser = username === 'McFlurry!';
-        let data = allTasks.filter(t => t.status === '未接' && (isSuperUser || t.publisher !== username));
+        let data = allTasks.filter(t => (t.status === '未接') && (isSuperUser || t.publisher !== username));
 
         // 排序逻辑
         const s = sortState.public;
@@ -547,8 +550,12 @@
             let opHTML = '';
             if (isSuperUser) {
                 opHTML = `<button class="btn btn-delete" onclick="deleteTask('${t.id}')">撤下任务</button>`;
-            } else {
-                opHTML = `<button class="btn btn-accept" onclick="addButtonFeedback(this, () => acceptTask('${t.id}'))">接受任务</button>`;
+            } else if (t.status === '预约中' && t.assignee !== username) {
+                opHTML = `<span class="btn-disabled">被预约</span>`;
+            } else if (t.status === '预约中' && t.assignee === username) {
+                opHTML = `<button class="btn btn-unclaim" onclick="unreserveTask('${t.id}')">放弃预约</button> <button class="btn btn-accept" onclick="addButtonFeedback(this, () => acceptTask('${t.id}'))">领取</button>`;
+            } else if (t.status === '未接') {
+                opHTML = `<button class="btn btn-reserve" onclick="reserveTask('${t.id}')">预约</button> <button class="btn btn-accept" onclick="addButtonFeedback(this, () => acceptTask('${t.id}'))">领取</button>`;
             }
             tr.innerHTML = `<td>${t.level}</td><td>${t.details}</td><td>${t.publisher}</td><td>${opHTML}</td>`;
             tbody.appendChild(tr);
@@ -560,7 +567,7 @@
         updateSortIndicators('#publicTasks', 'public');
     }
 
-    // === 公屏已接任务 ===
+    // === 公屏已接任务（进行中/已发送/预约中） ===
     function renderActiveTasks() {
         const tbody = document.querySelector('#activeTasks tbody');
         tbody.innerHTML = '';
@@ -569,7 +576,7 @@
 
         allTasks.filter(t => t.status !== '未接').forEach(t => {
             if (t.assignee === username) {
-                if (t.status !== '已完成') myFirst.push(t); else mySecond.push(t);
+                if (t.status !== '已发送') myFirst.push(t); else mySecond.push(t);
             } else {
                 if (t.status === '进行中') waiting.push(t); else others.push(t);
             }
@@ -583,7 +590,7 @@
             const columns = ['level', 'details', 'publisher', 'assignee', 'status'];
             const key = columns[s.key];
             const asc = s.asc ? 1 : -1;
-            const orderStatus = { '进行中': 0, '未接': 1, '已完成': 2 };
+            const orderStatus = { '进行中': 0, '预约中': 1, '未接': 2, '已发送': 3 };
             data = data.slice().sort((a, b) => {
                 let av = a[key] ?? '';
                 let bv = b[key] ?? '';
@@ -599,18 +606,22 @@
 
         pageData.forEach(t => {
             let opHTML = '';
-            if (t.status === '已完成') {
-                opHTML = `<span class="btn-disabled">已完成</span>`;
-            } else if (t.assignee === username) {
-                opHTML = `<button class="btn btn-unclaim" onclick="unclaimTask('${t.id}')">放弃任务</button> <button class="btn btn-complete" onclick="completeTask('${t.id}')">已完成</button>`;
-            } else if (isSuperUser && t.status !== '已完成') {
+            if (t.status === '已发送') {
+                opHTML = `<span class="btn-disabled">已发送</span>`;
+            } else if (t.assignee === username && t.status === '进行中') {
+                opHTML = `<button class="btn btn-unclaim" onclick="unclaimTask('${t.id}')">放弃任务</button> <button class="btn btn-complete" onclick="completeTask('${t.id}')">已发送</button>`;
+            } else if (t.assignee === username && t.status === '预约中') {
+                opHTML = `<button class="btn btn-unclaim" onclick="unreserveTask('${t.id}')">放弃预约</button> <button class="btn btn-accept" onclick="addButtonFeedback(this, () => acceptTask('${t.id}'))">领取</button>`;
+            } else if (t.status === '预约中') {
+                opHTML = `<span class="btn-disabled">被预约</span>`;
+            } else if (isSuperUser && t.status !== '已发送') {
                 opHTML = `<button class="btn btn-delete" onclick="deleteTask('${t.id}')">撤下任务</button>`;
             } else {
                 opHTML = '-';
             }
 
             const tr = document.createElement('tr');
-            tr.innerHTML = `<td>${t.level}</td><td>${t.details}</td><td>${t.publisher}</td><td>${t.assignee}</td><td>${t.status}</td><td>${opHTML}</td>`;
+            tr.innerHTML = `<td>${t.level}</td><td>${t.details}</td><td>${t.publisher}</td><td>${t.assignee || '-'}</td><td>${t.status}</td><td>${opHTML}</td>`;
             tbody.appendChild(tr);
         });
 
@@ -619,6 +630,30 @@
         enableTableSort('#activeTasks', 'active', renderActiveTasks, ['level', 'details', 'publisher', 'assignee', 'status']);
         updateSortIndicators('#activeTasks', 'active');
     }
+
+    // === 前端预约/放弃预约接口 ===
+    function reserveTask(id) {
+        fetch(`/api/tasks/${id}/reserve`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user: username })
+        }).then(res => {
+            if (res.ok) renderPublicTasks();
+            else alert('预约失败');
+        });
+    }
+
+    function unreserveTask(id) {
+        fetch(`/api/tasks/${id}/unreserve`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user: username })
+        }).then(res => {
+            if (res.ok) renderPublicTasks();
+            else alert('放弃预约失败');
+        });
+    }
+
 
 
 
@@ -678,6 +713,33 @@
 
         button.className = 'btn btn-complete';
         button.textContent = '确定完成';
+        button.style.border = '3px solid black';
+    }
+
+    function forceCompleteTask(id) {
+        const button = event.target;
+
+        // 如果是确认状态
+        if (pendingConfirm && pendingConfirm.id === id && pendingConfirm.type === 'complete') {
+            clearConfirmState();
+            // 执行实际的操作
+            addButtonFeedback(button, () => axios.post(`/api/tasks/${id}/complete`, { user: username }));
+            return;
+        }
+
+        // 第一次点击，进入确认状态
+        clearConfirmState(); // 清除其他可能的确认状态
+
+        pendingConfirm = {
+            id: id,
+            type: 'complete',
+            button: button,
+            originalClass: button.className,
+            originalText: button.textContent
+        };
+
+        button.className = 'btn btn-forceComplete';
+        button.textContent = '强行发送';
         button.style.border = '3px solid black';
     }
 
@@ -790,7 +852,7 @@
 
         const res = await fetch("/api/tasks");
         const tasks = await res.json();
-        const myUnfinished = tasks.filter(t => t.publisher === name && t.status !== "已完成");
+        const myUnfinished = tasks.filter(t => t.publisher === name && t.status !== "已发送");
 
         if (myUnfinished.length === 0) {
             alert("没有可撤回的任务");

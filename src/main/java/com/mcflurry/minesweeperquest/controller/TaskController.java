@@ -27,9 +27,7 @@ public class TaskController {
         String publisher = body.get("publisher");
         String level = body.get("level");
         String details = body.get("details");
-        if (publisher == null || publisher.trim().isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
+        if (publisher == null || publisher.trim().isEmpty()) return ResponseEntity.badRequest().build();
         Task t = service.createTask(publisher.trim(), level == null ? "" : level, details == null ? "" : details);
         return ResponseEntity.ok(t);
     }
@@ -48,6 +46,22 @@ public class TaskController {
         if (user == null || user.trim().isEmpty()) return ResponseEntity.badRequest().body("missing user");
         boolean ok = service.unclaimTask(id, user.trim());
         return ok ? ResponseEntity.ok().build() : ResponseEntity.status(409).body("cannot unclaim");
+    }
+
+    @PostMapping("/{id}/reserve")
+    public ResponseEntity<?> reserve(@PathVariable String id, @RequestBody Map<String, String> body) {
+        String user = body.get("user");
+        if (user == null || user.trim().isEmpty()) return ResponseEntity.badRequest().body("missing user");
+        boolean ok = service.reserveTask(id, user.trim());
+        return ok ? ResponseEntity.ok().build() : ResponseEntity.status(409).body("cannot reserve");
+    }
+
+    @PostMapping("/{id}/unreserve")
+    public ResponseEntity<?> unreserve(@PathVariable String id, @RequestBody Map<String, String> body) {
+        String user = body.get("user");
+        if (user == null || user.trim().isEmpty()) return ResponseEntity.badRequest().body("missing user");
+        boolean ok = service.unreserveTask(id, user.trim());
+        return ok ? ResponseEntity.ok().build() : ResponseEntity.status(409).body("cannot unreserve");
     }
 
     @PostMapping("/{id}/complete")

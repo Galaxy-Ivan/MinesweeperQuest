@@ -6,7 +6,7 @@ public class Task {
     private String assignee;
     private String level;
     private String details;
-    private String status; // "未接"、"进行中"、"已完成"
+    private String status; // "未接"、"进行中"、"已发送"
 
     public Task() {}
 
