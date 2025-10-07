@@ -2,14 +2,14 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8" />
-    <title>Minesweeper Quest</title>
+    <title>WoM 小食堂</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
     <link rel="icon" type="image/png" sizes="16x16" href="moh16.png">
     <link rel="icon" type="image/png" sizes="48x48" href="moh48.png">
     <link rel="icon" type="image/png" sizes="128x128" href="moh128.png">
-<!--    <link rel="apple-touch-icon" sizes="128x128" href="moh128.png"> 没搞懂这个的用途-->
+    <!--    <link rel="apple-touch-icon" sizes="128x128" href="moh128.png"> 没搞懂这个的用途-->
     <style>
         body {
             font-family: "Microsoft Yahei", sans-serif;
@@ -105,7 +105,7 @@
 </head>
 
 <body>
-<h1>Minesweeper Quest</h1>
+<h1>WoM 小食堂</h1>
 
 <div>
     <label>用户名：</label>
@@ -114,7 +114,7 @@
 </div>
 
 <div id="publishArea" style="display:none; margin-top: 20px;">
-    <h2>发布任务</h2>
+    <h2><a href="https://minesweeper.online/friend-quests" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">发布任务</a></h2>
     <input id="level" placeholder="任务等级" />
     <input id="details" placeholder="任务详情" style="width:250px;" />
     <button id="publishBtn" class="btn btn-accept">发布</button>
@@ -123,7 +123,7 @@
     <!-- 批量输入框（默认隐藏） -->
     <div id="bulkInputContainer" style="display: none; margin-top: 8px;">
     <textarea id="bulkInput" rows="6" style="width: 100%; resize: vertical;"
-              placeholder="在这里黏贴任务文本，每行一个任务，或任意你自定义的格式..."></textarea>
+              placeholder="在这里黏贴任务文本，每行一个任务..."></textarea>
     </div>
 </div>
 
@@ -254,7 +254,7 @@
                 alert(`已成功发布 ${tasks.length} 个任务，发布信息已写入剪贴板`);
 
                 // 构造要复制的文本
-                const clipboardText = `我在 frp-oil.com:35882 发布了 ${tasks.length} 个任务，速抢，手慢无！`;
+                const clipboardText = `开饭了！我在 frp-oil.com:35882 发布了 ${tasks.length} 个任务，速来！`;
 
                 // 使用安全复制函数
                 copyToClipboard(clipboardText)
@@ -437,7 +437,7 @@
     function renderMyTasks() {
         const tbody = document.querySelector('#myTasks tbody');
         tbody.innerHTML = '';
-        const order = { '已接': 0, '未接': 1, '已完成': 2 };
+        const order = { '进行中': 0, '未接': 1, '已完成': 2 };
         allTasks.filter(t => t.publisher === username)
             .sort((a, b) => {
                 const statusDiff = order[a.status] - order[b.status];
@@ -450,7 +450,7 @@
                 if (t.status === '已完成') {
                     opHTML = `<span class="btn-disabled">已完成</span>`;
                 } else if (t.status === '进行中') {
-                    opHTML = `<button class="btn btn-complete" onclick="completeTask('${t.id}')">已完成</button>`;
+                    opHTML = `<button class="btn btn-complete" onclick="completeTask('${t.id}')">已完成</button> <button class="btn btn-delete" onclick="deleteTask('${t.id}')">撤下</button>`;
                 } else {
                     opHTML = `<button class="btn btn-delete" onclick="deleteTask('${t.id}')">撤下</button>`;
                 }
@@ -498,6 +498,7 @@
         const isSuperUser = username === 'McFlurry!';
         const myFirst = [];
         const mySecond = [];
+        const wating = [];
         const others = [];
 
         allTasks.filter(t => t.status !== '未接').forEach(t => {
@@ -507,10 +508,15 @@
                 else
                     mySecond.push(t);
             }
-            else others.push(t);
+            else {
+                if (t.status === '进行中')
+                    wating.push(t);
+                else
+                    others.push(t);
+            }
         });
 
-        const data = [...myFirst, ...mySecond, ...others];
+        const data = [...myFirst, ...mySecond, ...wating, ...others];
         const totalPages = Math.ceil(data.length / PAGE_SIZE);
         const pageData = data.slice((activePage - 1) * PAGE_SIZE, activePage * PAGE_SIZE);
 
@@ -520,7 +526,7 @@
             if (t.status === '已完成') {
                 opHTML = `<span class="btn-disabled">已完成</span>`;
             } else if (t.assignee === username) {
-                opHTML = `<button class="btn btn-unclaim" onclick="unclaimTask('${t.id}')">放弃任务</button>`;
+                opHTML = `<button class="btn btn-unclaim" onclick="unclaimTask('${t.id}')">放弃任务</button> <button class="btn btn-complete" onclick="completeTask('${t.id}')">已完成</button>`;
             } else if (isSuperUser && t.status !== '已完成') {
                 // ✅ McFlurry! 可撤下任意未完成任务（包括别人发布、正在进行的）
                 opHTML = `<button class="btn btn-delete" onclick="deleteTask('${t.id}')">撤下任务</button>`;
